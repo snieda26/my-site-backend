@@ -5,12 +5,14 @@
  */
 
 import { drizzle } from 'drizzle-orm/postgres-js'
-import postgres from 'postgres'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as dotenv from 'dotenv'
 import * as schema from '../src/core/database/schema'
 import { eq } from 'drizzle-orm'
+
+// Import postgres using require for CommonJS compatibility
+const postgres = require('postgres')
 
 dotenv.config()
 

@@ -5,11 +5,13 @@
  */
 
 import { drizzle } from 'drizzle-orm/postgres-js'
-import postgres from 'postgres'
 import * as argon2 from 'argon2'
 import * as dotenv from 'dotenv'
 import * as schema from '../src/core/database/schema'
 import { eq } from 'drizzle-orm'
+
+// Import postgres using require for CommonJS compatibility
+const postgres = require('postgres')
 
 // Load environment variables
 dotenv.config({ path: '.env' })
