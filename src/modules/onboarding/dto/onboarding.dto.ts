@@ -1,3 +1,8 @@
+// ============================================================================
+// TEMPORARY: Onboarding DTOs are kept for type safety but functionality is disabled
+// TODO: Re-enable when onboarding feature is ready
+// ============================================================================
+
 import { ApiProperty } from '@nestjs/swagger'
 import { IsArray, IsBoolean, IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator'
 import { ExperienceLevel, TargetPosition, LearningGoal } from '@prisma/client'

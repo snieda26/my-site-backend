@@ -31,13 +31,15 @@ import { ProgressModule } from '@modules/progress/progress.module'
 			useFactory: recaptchaConfig,
 		}),
 
-		DatabaseModule,
+	DatabaseModule,
 
-		IdentityModule,
-		OnboardingModule,
-		QuestionsModule,
-		ProblemsModule,
-		ProgressModule,
-	],
+	IdentityModule,
+	// TEMPORARY: OnboardingModule is imported but routes are disabled in the module
+	// TODO: Re-enable when onboarding feature is ready
+	OnboardingModule,
+	QuestionsModule,
+	ProblemsModule,
+	ProgressModule,
+],
 })
 export class AppModule {}

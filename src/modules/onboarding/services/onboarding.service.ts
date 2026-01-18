@@ -1,3 +1,8 @@
+// ============================================================================
+// TEMPORARY: Onboarding service is disabled but kept for potential future use
+// TODO: Re-enable when onboarding feature is ready
+// ============================================================================
+
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { DatabaseService } from '@core/database/database.service'
 import { UpdateOnboardingDto, OnboardingOptionsResponseDto } from '../dto/onboarding.dto'
