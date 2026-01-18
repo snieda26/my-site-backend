@@ -109,7 +109,11 @@ enum LearningGoal {
 model Category {
   id          String  @id @default(cuid())
   slug        String  @unique
-  name        String
+  
+  // Localized fields
+  nameEn      String  @map("name_en")
+  nameUa      String  @map("name_ua")
+  
   description String?
   icon        String?
   color       String?
@@ -128,12 +132,22 @@ model Category {
 model Question {
   id          String  @id @default(cuid())
   slug        String  @unique
-  title       String
-  content     String  @db.Text
-  answer      String  @db.Text
+  
+  // Localized fields
+  titleEn       String    @map("title_en")
+  titleUa       String    @map("title_ua")
+  descriptionEn String?   @map("description_en")
+  descriptionUa String?   @map("description_ua")
+  
+  // Markdown content (will be split into languages later)
+  contentMarkdown String  @db.Text @map("content_markdown")
   
   difficulty  Difficulty @default(MEDIUM)
   order       Int        @default(0)
+  
+  // Navigation links
+  prevSlug    String?    @map("prev_slug")
+  nextSlug    String?    @map("next_slug")
   
   category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId  String   @map("category_id")

@@ -20,7 +20,7 @@ export class BookmarksService {
 					question: {
 						include: {
 							category: {
-								select: { id: true, slug: true, name: true, color: true },
+								select: { id: true, slug: true, nameEn: true, nameUa: true, color: true },
 							},
 						},
 					},
@@ -56,7 +56,7 @@ export class BookmarksService {
 					question: {
 						include: {
 							category: {
-								select: { id: true, slug: true, name: true, color: true },
+								select: { id: true, slug: true, nameEn: true, nameUa: true, color: true },
 							},
 						},
 					},
@@ -72,7 +72,7 @@ export class BookmarksService {
 		])
 
 		return createPaginatedResult(
-			bookmarks.map(b => b.question),
+			bookmarks.map(b => b.question).filter(q => q !== null),
 			total,
 			page,
 			limit

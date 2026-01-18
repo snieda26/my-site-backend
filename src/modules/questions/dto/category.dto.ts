@@ -4,7 +4,8 @@ import { ApiProperty } from '@nestjs/swagger'
 
 const createCategorySchema = z.object({
 	slug: z.string().min(1).max(100),
-	name: z.string().min(1).max(200),
+	nameEn: z.string().min(1).max(200),
+	nameUa: z.string().min(1).max(200),
 	description: z.string().max(500).optional(),
 	icon: z.string().max(50).optional(),
 	color: z.string().max(50).optional(),
@@ -15,8 +16,11 @@ export class CreateCategoryDto extends createZodDto(createCategorySchema) {
 	@ApiProperty({ example: 'javascript', description: 'Category slug (URL-friendly)' })
 	slug: string
 
-	@ApiProperty({ example: 'JavaScript', description: 'Category name' })
-	name: string
+	@ApiProperty({ example: 'JavaScript', description: 'Category name (English)' })
+	nameEn: string
+
+	@ApiProperty({ example: 'JavaScript', description: 'Category name (Ukrainian)' })
+	nameUa: string
 
 	@ApiProperty({ example: 'Core JavaScript concepts and interview questions', required: false })
 	description?: string

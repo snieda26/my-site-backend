@@ -31,7 +31,8 @@ export class ProgressService {
 			return {
 				id: category.id,
 				slug: category.slug,
-				name: category.name,
+				nameEn: category.nameEn,
+				nameUa: category.nameUa,
 				icon: category.icon,
 				color: category.color,
 				totalQuestions,
@@ -80,7 +81,8 @@ export class ProgressService {
 		const questionsWithProgress = category.questions.map(question => ({
 			id: question.id,
 			slug: question.slug,
-			title: question.title,
+			titleEn: question.titleEn,
+			titleUa: question.titleUa,
 			difficulty: question.difficulty,
 			status: question.progress[0]?.status || 'NOT_STARTED',
 		}))
@@ -92,7 +94,8 @@ export class ProgressService {
 			category: {
 				id: category.id,
 				slug: category.slug,
-				name: category.name,
+				nameEn: category.nameEn,
+				nameUa: category.nameUa,
 				icon: category.icon,
 				color: category.color,
 			},
@@ -155,7 +158,7 @@ export class ProgressService {
 					question: {
 						include: {
 							category: {
-								select: { id: true, slug: true, name: true, color: true },
+								select: { id: true, slug: true, nameEn: true, nameUa: true, color: true },
 							},
 						},
 					},
@@ -171,7 +174,7 @@ export class ProgressService {
 		])
 
 		return createPaginatedResult(
-			completed.map(p => p.question),
+			completed.map(p => p.question).filter(q => q !== null),
 			total,
 			page,
 			limit

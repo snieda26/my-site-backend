@@ -16,8 +16,9 @@ export class QuestionsService {
 
 		if (search) {
 			where.OR = [
-				{ title: { contains: search, mode: 'insensitive' } },
-				{ content: { contains: search, mode: 'insensitive' } },
+				{ titleEn: { contains: search, mode: 'insensitive' } },
+				{ titleUa: { contains: search, mode: 'insensitive' } },
+				{ contentMarkdown: { contains: search, mode: 'insensitive' } },
 			]
 		}
 
@@ -44,7 +45,7 @@ export class QuestionsService {
 				orderBy,
 				include: {
 					category: {
-						select: { id: true, slug: true, name: true, color: true },
+						select: { id: true, slug: true, nameEn: true, nameUa: true, color: true },
 					},
 					tags: true,
 				},
@@ -88,7 +89,7 @@ export class QuestionsService {
 				orderBy,
 				include: {
 					category: {
-						select: { id: true, slug: true, name: true, color: true },
+						select: { id: true, slug: true, nameEn: true, nameUa: true, color: true },
 					},
 					tags: true,
 				},

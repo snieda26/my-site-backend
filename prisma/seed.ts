@@ -30,7 +30,8 @@ async function main() {
 			update: {},
 			create: {
 				slug: 'javascript',
-				name: 'JavaScript',
+				nameEn: 'JavaScript',
+				nameUa: 'JavaScript',
 				description: 'Core JavaScript concepts, ES6+, async programming, and more',
 				icon: '🟨',
 				color: '#F7DF1E',
@@ -42,7 +43,8 @@ async function main() {
 			update: {},
 			create: {
 				slug: 'html-and-css',
-				name: 'HTML & CSS',
+				nameEn: 'HTML & CSS',
+				nameUa: 'HTML & CSS',
 				description: 'Web fundamentals, layouts, responsive design, and accessibility',
 				icon: '🎨',
 				color: '#E34F26',
@@ -54,7 +56,8 @@ async function main() {
 			update: {},
 			create: {
 				slug: 'typescript',
-				name: 'TypeScript',
+				nameEn: 'TypeScript',
+				nameUa: 'TypeScript',
 				description: 'Type system, generics, utility types, and best practices',
 				icon: '💙',
 				color: '#3178C6',
@@ -66,7 +69,8 @@ async function main() {
 			update: {},
 			create: {
 				slug: 'react',
-				name: 'React',
+				nameEn: 'React',
+				nameUa: 'React',
 				description: 'Components, hooks, state management, and React ecosystem',
 				icon: '⚛️',
 				color: '#61DAFB',
@@ -78,7 +82,8 @@ async function main() {
 			update: {},
 			create: {
 				slug: 'vue',
-				name: 'Vue.js',
+				nameEn: 'Vue.js',
+				nameUa: 'Vue.js',
 				description: 'Vue 3, Composition API, Vuex, and Vue Router',
 				icon: '💚',
 				color: '#4FC08D',
@@ -90,7 +95,8 @@ async function main() {
 			update: {},
 			create: {
 				slug: 'angular',
-				name: 'Angular',
+				nameEn: 'Angular',
+				nameUa: 'Angular',
 				description: 'Components, services, RxJS, and Angular ecosystem',
 				icon: '🔴',
 				color: '#DD0031',
@@ -102,7 +108,8 @@ async function main() {
 			update: {},
 			create: {
 				slug: 'redux',
-				name: 'Redux',
+				nameEn: 'Redux',
+				nameUa: 'Redux',
 				description: 'State management with Redux, Redux Toolkit, and middleware',
 				icon: '🟣',
 				color: '#764ABC',
@@ -110,11 +117,12 @@ async function main() {
 			},
 		}),
 		prisma.category.upsert({
-			where: { slug: 'general-questions' },
+			where: { slug: 'general' },
 			update: {},
 			create: {
-				slug: 'general-questions',
-				name: 'General Questions',
+				slug: 'general',
+				nameEn: 'General Questions',
+				nameUa: 'Загальні питання',
 				description: 'Browser APIs, HTTP, security, and web fundamentals',
 				icon: '🌐',
 				color: '#6B7280',
@@ -126,7 +134,8 @@ async function main() {
 			update: {},
 			create: {
 				slug: 'architecture',
-				name: 'Architecture',
+				nameEn: 'Architecture',
+				nameUa: 'Архітектура',
 				description: 'Design patterns, SOLID principles, and system design',
 				icon: '🏗️',
 				color: '#8B5CF6',
@@ -138,7 +147,8 @@ async function main() {
 			update: {},
 			create: {
 				slug: 'principles',
-				name: 'Principles',
+				nameEn: 'Principles',
+				nameUa: 'Принципи',
 				description: 'SOLID, DRY, KISS, and other programming principles',
 				icon: '📐',
 				color: '#F59E0B',
@@ -150,7 +160,8 @@ async function main() {
 			update: {},
 			create: {
 				slug: 'patterns',
-				name: 'Patterns',
+				nameEn: 'Patterns',
+				nameUa: 'Паттерни',
 				description: 'Design patterns, creational, structural, and behavioral',
 				icon: '🧩',
 				color: '#EC4899',
@@ -171,15 +182,21 @@ async function main() {
 			update: {},
 			create: {
 				slug: 'what-is-closure',
-				title: 'What is a closure in JavaScript?',
-				content: `A closure is a fundamental concept in JavaScript that allows a function to access variables from its outer (enclosing) scope even after the outer function has returned.
+				titleEn: 'What is a closure in JavaScript?',
+				titleUa: 'Що таке замикання в JavaScript?',
+				descriptionEn: 'Learn about closures in JavaScript',
+				descriptionUa: 'Дізнайтесь про замикання в JavaScript',
+				contentMarkdown: `A closure is a fundamental concept in JavaScript that allows a function to access variables from its outer (enclosing) scope even after the outer function has returned.
 
 ## Key Points
 
 - A closure is created every time a function is created
 - The inner function maintains a reference to its lexical environment
-- Closures enable data privacy and encapsulation`,
-				answer: `A **closure** is a function that has access to variables from its outer (enclosing) function's scope, even after the outer function has returned.
+- Closures enable data privacy and encapsulation
+
+## Example
+
+A **closure** is a function that has access to variables from its outer (enclosing) function's scope, even after the outer function has returned.
 
 ## Example
 
@@ -217,9 +234,13 @@ In this example, the inner function maintains access to the \`count\` variable e
 			update: {},
 			create: {
 				slug: 'what-is-event-loop',
-				title: 'Explain the Event Loop in JavaScript',
-				content: `The event loop is JavaScript's mechanism for handling asynchronous operations in a single-threaded environment.`,
-				answer: `The **Event Loop** is the mechanism that allows JavaScript to perform non-blocking operations despite being single-threaded.
+				titleEn: 'Explain the Event Loop in JavaScript',
+				titleUa: 'Поясніть Event Loop в JavaScript',
+				descriptionEn: 'Learn about the Event Loop',
+				descriptionUa: 'Дізнайтесь про Event Loop',
+				contentMarkdown: `The event loop is JavaScript's mechanism for handling asynchronous operations in a single-threaded environment.
+
+The **Event Loop** is a mechanism that allows JavaScript to perform non-blocking operations despite being single-threaded.
 
 ## Components
 
@@ -257,9 +278,13 @@ The event loop continuously checks if the call stack is empty, then processes mi
 			update: {},
 			create: {
 				slug: 'what-is-react',
-				title: 'What is React and why is it needed?',
-				content: `React is a JavaScript library for building user interfaces. Understanding why it exists helps appreciate its design decisions.`,
-				answer: `**React** is a declarative, component-based JavaScript library for building user interfaces.
+				titleEn: 'What is React and why is it needed?',
+				titleUa: 'Що таке React і навіщо він потрібен?',
+				descriptionEn: 'Learn about React library',
+				descriptionUa: 'Дізнайтесь про бібліотеку React',
+				contentMarkdown: `**React** is a declarative, component-based JavaScript library for building user interfaces.
+
+React is a JavaScript library for building user interfaces. Understanding why it exists helps appreciate its design decisions.
 
 ## Why React?
 
@@ -297,9 +322,13 @@ function App() {
 			update: {},
 			create: {
 				slug: 'virtual-dom',
-				title: 'What is Virtual DOM and how does it work?',
-				content: `The Virtual DOM is one of React's key innovations for efficient rendering.`,
-				answer: `The **Virtual DOM** is a lightweight JavaScript representation of the actual DOM. React uses it to optimize rendering performance.
+				titleEn: 'What is Virtual DOM and how does it work?',
+				titleUa: 'Що таке Віртуальний DOM і як він працює?',
+				descriptionEn: 'Learn about the Virtual DOM',
+				descriptionUa: 'Дізнайтесь про Віртуальний DOM',
+				contentMarkdown: `The **Virtual DOM** is a lightweight JavaScript representation of the actual DOM. React uses it to optimize rendering performance.
+
+The Virtual DOM is one of React's key innovations for efficient rendering.
 
 ## How it Works
 
@@ -381,7 +410,7 @@ setState({ count: count + 1 })
 			update: {},
 			create: {
 				slug: 'implement-usestate',
-				title: 'Implement a custom useState hook',
+				title: 'Implement a custom useState hook',  // Problems use single title field
 				description: `Create a simplified version of React's useState hook that manages state and triggers re-renders.
 
 ## Requirements
@@ -426,7 +455,7 @@ function useState(initialValue) {
 			update: {},
 			create: {
 				slug: 'debounce-function',
-				title: 'Implement a debounce function',
+				title: 'Implement a debounce function',  // Problems use single title field
 				description: `Create a debounce function that delays invoking a function until after a certain amount of time has elapsed since the last time it was invoked.
 
 ## Requirements
@@ -471,7 +500,7 @@ debouncedFn(); // resets timer, waits another 300ms
 			update: {},
 			create: {
 				slug: 'flatten-array',
-				title: 'Flatten a nested array',
+				title: 'Flatten a nested array',  // Problems use single title field
 				description: `Write a function that flattens a nested array to a specified depth.
 
 ## Requirements
