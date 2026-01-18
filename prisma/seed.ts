@@ -186,7 +186,8 @@ async function main() {
 				titleUa: 'Що таке замикання в JavaScript?',
 				descriptionEn: 'Learn about closures in JavaScript',
 				descriptionUa: 'Дізнайтесь про замикання в JavaScript',
-				contentMarkdown: `A closure is a fundamental concept in JavaScript that allows a function to access variables from its outer (enclosing) scope even after the outer function has returned.
+				contentMarkdownEn: `A closure is a fundamental concept in JavaScript.`,
+				contentMarkdownUa: `Замикання - це фундаментальна концепція в JavaScript.
 
 ## Key Points
 
@@ -238,9 +239,8 @@ In this example, the inner function maintains access to the \`count\` variable e
 				titleUa: 'Поясніть Event Loop в JavaScript',
 				descriptionEn: 'Learn about the Event Loop',
 				descriptionUa: 'Дізнайтесь про Event Loop',
-				contentMarkdown: `The event loop is JavaScript's mechanism for handling asynchronous operations in a single-threaded environment.
-
-The **Event Loop** is a mechanism that allows JavaScript to perform non-blocking operations despite being single-threaded.
+				contentMarkdownEn: `The event loop is JavaScript's mechanism.`,
+				contentMarkdownUa: `Event loop - це механізм JavaScript.
 
 ## Components
 
@@ -282,9 +282,8 @@ The event loop continuously checks if the call stack is empty, then processes mi
 				titleUa: 'Що таке React і навіщо він потрібен?',
 				descriptionEn: 'Learn about React library',
 				descriptionUa: 'Дізнайтесь про бібліотеку React',
-				contentMarkdown: `**React** is a declarative, component-based JavaScript library for building user interfaces.
-
-React is a JavaScript library for building user interfaces. Understanding why it exists helps appreciate its design decisions.
+				contentMarkdownEn: `**React** is a declarative JavaScript library.`,
+				contentMarkdownUa: `**React** - це декларативна JavaScript бібліотека.
 
 ## Why React?
 
@@ -326,9 +325,8 @@ function App() {
 				titleUa: 'Що таке Віртуальний DOM і як він працює?',
 				descriptionEn: 'Learn about the Virtual DOM',
 				descriptionUa: 'Дізнайтесь про Віртуальний DOM',
-				contentMarkdown: `The **Virtual DOM** is a lightweight JavaScript representation of the actual DOM. React uses it to optimize rendering performance.
-
-The Virtual DOM is one of React's key innovations for efficient rendering.
+				contentMarkdownEn: `The **Virtual DOM** is a lightweight representation.`,
+				contentMarkdownUa: `**Віртуальний DOM** - це легке представлення.
 
 ## How it Works
 

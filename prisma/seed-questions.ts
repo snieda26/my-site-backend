@@ -179,21 +179,22 @@ async function seed() {
 				const secondaryDoc = uaDoc || enDoc!
 
 				try {
-					await prisma.question.create({
-						data: {
-							slug: slug,
-							titleEn: enDoc?.frontmatter.title || primaryDoc.frontmatter.title,
-							titleUa: uaDoc?.frontmatter.title || primaryDoc.frontmatter.title,
-							descriptionEn: enDoc?.frontmatter.description,
-							descriptionUa: uaDoc?.frontmatter.description || enDoc?.frontmatter.description,
-							contentMarkdown: enDoc?.content || primaryDoc.content, // Use English for now
-							categoryId: categoryId,
-							order: i + 1,
-							difficulty: 'MEDIUM',
-							prevSlug: primaryDoc.frontmatter.prev,
-							nextSlug: primaryDoc.frontmatter.next,
-						},
-					})
+        await prisma.question.create({
+            data: {
+                slug: slug,
+                titleEn: enDoc?.frontmatter.title || primaryDoc.frontmatter.title,
+                titleUa: uaDoc?.frontmatter.title || primaryDoc.frontmatter.title,
+                descriptionEn: enDoc?.frontmatter.description,
+                descriptionUa: uaDoc?.frontmatter.description || enDoc?.frontmatter.description,
+                contentMarkdownEn: enDoc?.content || primaryDoc.content,
+                contentMarkdownUa: uaDoc?.content || enDoc?.content || primaryDoc.content,
+                categoryId: categoryId,
+                order: i + 1,
+                difficulty: 'MEDIUM',
+                prevSlug: primaryDoc.frontmatter.prev,
+                nextSlug: primaryDoc.frontmatter.next,
+            },
+        })
 
 					const langIndicator = enDoc && uaDoc ? '🌐' : enDoc ? '🇬🇧' : '🇺🇦'
 					console.log(`    ✓ ${slug} ${langIndicator}`)

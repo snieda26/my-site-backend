@@ -139,8 +139,9 @@ model Question {
   descriptionEn String?   @map("description_en")
   descriptionUa String?   @map("description_ua")
   
-  // Markdown content (will be split into languages later)
-  contentMarkdown String  @db.Text @map("content_markdown")
+  // Markdown content by language
+  contentMarkdownEn String  @db.Text @map("content_markdown_en")
+  contentMarkdownUa String  @db.Text @map("content_markdown_ua")
   
   difficulty  Difficulty @default(MEDIUM)
   order       Int        @default(0)

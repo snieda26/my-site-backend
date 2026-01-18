@@ -18,7 +18,8 @@ export class QuestionsService {
 			where.OR = [
 				{ titleEn: { contains: search, mode: 'insensitive' } },
 				{ titleUa: { contains: search, mode: 'insensitive' } },
-				{ contentMarkdown: { contains: search, mode: 'insensitive' } },
+				{ contentMarkdownEn: { contains: search, mode: 'insensitive' } },
+				{ contentMarkdownUa: { contains: search, mode: 'insensitive' } },
 			]
 		}
 
