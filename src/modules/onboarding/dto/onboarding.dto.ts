@@ -5,7 +5,17 @@
 
 import { ApiProperty } from '@nestjs/swagger'
 import { IsArray, IsBoolean, IsEnum, IsInt, IsOptional, IsString, Max, Min } from 'class-validator'
-import { ExperienceLevel, TargetPosition, LearningGoal } from '@prisma/client'
+import { experienceLevelEnum, targetPositionEnum, learningGoalEnum } from '@/core/database/schema'
+
+// Type exports for validation
+export const ExperienceLevel = experienceLevelEnum.enumValues
+export const TargetPosition = targetPositionEnum.enumValues
+export const LearningGoal = learningGoalEnum.enumValues
+
+// Create types from enum values for TypeScript
+export type ExperienceLevel = (typeof experienceLevelEnum.enumValues)[number]
+export type TargetPosition = (typeof targetPositionEnum.enumValues)[number]
+export type LearningGoal = (typeof learningGoalEnum.enumValues)[number]
 
 export class UpdateOnboardingDto {
 	@ApiProperty({

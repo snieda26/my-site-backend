@@ -61,17 +61,22 @@ export class DatabaseService implements OnModuleInit, OnModuleDestroy {
 
 	async onModuleInit() {
 		// Connection will be established lazily on first query
-		// No need to test connection here - it causes lifecycle issues
-		this.logger.log('Database service ready')
+		this.logger.log('✅ Database service ready')
 	}
 
 	async onModuleDestroy() {
-		try {
-			await this.client.end()
-			this.logger.log('Database connection closed')
-		} catch (error) {
-			// Ignore errors on close - connection might already be closed
-			this.logger.warn('Connection already closed or error on close')
+		// Don't close connection during hot reload in development
+		// The postgres client is shared across reloads via require()
+		// Closing it breaks the new instance
+		if (process.env.NODE_ENV === 'production') {
+			try {
+				await this.client.end({ timeout: 5 })
+				this.logger.log('Database connection closed')
+			} catch (error) {
+				this.logger.debug('Error closing connection')
+			}
+		} else {
+			this.logger.debug('Keeping connection open for hot reload')
 		}
 	}
 

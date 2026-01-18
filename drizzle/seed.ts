@@ -55,6 +55,8 @@ async function seed() {
 				emailVerified: true,
 				role: 'ADMIN',
 				onboardingCompleted: true,
+				createdAt: new Date(),
+				updatedAt: new Date(),
 			})
 			.onConflictDoNothing()
 		

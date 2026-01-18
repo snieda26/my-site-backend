@@ -72,13 +72,8 @@ src/
 ├── app.module.ts
 └── main.ts
 
-drizzle/                     # 🆕 Drizzle migrations & seeds
+drizzle/                     # 🚀 Drizzle migrations & seeds
 ├── 0000_loving_exiles.sql
-├── seed.ts
-└── seed-questions.ts
-
-prisma/                      # ⚠️ Legacy (kept for reference)
-├── schema.prisma
 ├── seed.ts
 └── seed-questions.ts
 ```
@@ -114,13 +109,6 @@ npx tsx drizzle/seed.ts
 
 # Seed questions from markdown
 npx tsx drizzle/seed-questions.ts
-```
-
-### Legacy Prisma (if needed)
-
-```bash
-yarn prisma:generate  # Generate Prisma Client
-yarn prisma:studio    # Open Prisma Studio
 ```
 
 ---
