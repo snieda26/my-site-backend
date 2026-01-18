@@ -3,88 +3,120 @@
 // TODO: Re-enable when onboarding feature is ready
 // ============================================================================
 
+/**
+ * Onboarding Service - Drizzle Implementation
+ * Manages user onboarding profile
+ */
+
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { DatabaseService } from '@core/database/database.service'
 import { UpdateOnboardingDto, OnboardingOptionsResponseDto } from '../dto/onboarding.dto'
+import { eq } from 'drizzle-orm'
+import * as schema from '@core/database/schema'
 
 @Injectable()
 export class OnboardingService {
-	constructor(private readonly db: DatabaseService) {}
+	constructor(private readonly database: DatabaseService) {}
 
 	async getOnboardingProfile(accountId: string) {
-		// First check if account exists
-		const account = await this.db.account.findUnique({
-			where: { id: accountId },
-			include: { profile: true },
-		})
+		// Check if account exists
+		const [account] = await this.database.db
+			.select()
+			.from(schema.accounts)
+			.where(eq(schema.accounts.id, accountId))
+			.limit(1)
 
 		if (!account) {
 			throw new NotFoundException('Account not found')
 		}
 
+		// Get profile
+		const [profile] = await this.database.db
+			.select()
+			.from(schema.userProfiles)
+			.where(eq(schema.userProfiles.accountId, accountId))
+			.limit(1)
+
 		// If profile doesn't exist, create one
-		if (!account.profile) {
-			const profile = await this.db.userProfile.create({
-				data: {
-					accountId,
-				},
-			})
+		if (!profile) {
+			const [newProfile] = await this.database.db
+				.insert(schema.userProfiles)
+				.values({ accountId })
+				.returning()
 
 			return {
-				...profile,
+				...newProfile,
 				onboardingCompleted: account.onboardingCompleted,
 			}
 		}
 
 		return {
-			...account.profile,
+			...profile,
 			onboardingCompleted: account.onboardingCompleted,
 		}
 	}
 
 	async updateOnboardingProfile(accountId: string, dto: UpdateOnboardingDto) {
-		// First check if profile exists
-		let profile = await this.db.userProfile.findUnique({
-			where: { accountId },
-		})
+		// Check if profile exists
+		const [profile] = await this.database.db
+			.select()
+			.from(schema.userProfiles)
+			.where(eq(schema.userProfiles.accountId, accountId))
+			.limit(1)
 
-		// Create profile if it doesn't exist
+		let updatedProfile: typeof schema.userProfiles.$inferSelect
+
 		if (!profile) {
-			profile = await this.db.userProfile.create({
-				data: {
+			// Create profile
+			[updatedProfile] = await this.database.db
+				.insert(schema.userProfiles)
+				.values({
 					accountId,
-				},
-			})
+					experienceLevel: dto.experienceLevel,
+					targetPosition: dto.targetPosition,
+					yearsOfExperience: dto.yearsOfExperience,
+					learningGoal: dto.learningGoal,
+					weeklyHours: dto.weeklyHours,
+					technologies: dto.technologies,
+					focusAreas: dto.focusAreas,
+					preferredLanguage: dto.preferredLanguage,
+				})
+				.returning()
+		} else {
+			// Update profile
+			[updatedProfile] = await this.database.db
+				.update(schema.userProfiles)
+				.set({
+					experienceLevel: dto.experienceLevel,
+					targetPosition: dto.targetPosition,
+					yearsOfExperience: dto.yearsOfExperience,
+					learningGoal: dto.learningGoal,
+					weeklyHours: dto.weeklyHours,
+					technologies: dto.technologies,
+					focusAreas: dto.focusAreas,
+					preferredLanguage: dto.preferredLanguage,
+					updatedAt: new Date(),
+				})
+				.where(eq(schema.userProfiles.accountId, accountId))
+				.returning()
 		}
 
-		// Update profile
-		const updatedProfile = await this.db.userProfile.update({
-			where: { accountId },
-			data: {
-				experienceLevel: dto.experienceLevel,
-				targetPosition: dto.targetPosition,
-				yearsOfExperience: dto.yearsOfExperience,
-				learningGoal: dto.learningGoal,
-				weeklyHours: dto.weeklyHours,
-				technologies: dto.technologies,
-				focusAreas: dto.focusAreas,
-				preferredLanguage: dto.preferredLanguage,
-			},
-		})
-
-		// Update onboarding status on account if provided
+		// Update onboarding status if provided
 		if (dto.onboardingCompleted !== undefined) {
-			await this.db.account.update({
-				where: { id: accountId },
-				data: {
+			await this.database.db
+				.update(schema.accounts)
+				.set({
 					onboardingCompleted: dto.onboardingCompleted,
-				},
-			})
+					updatedAt: new Date(),
+				})
+				.where(eq(schema.accounts.id, accountId))
 		}
 
-		const account = await this.db.account.findUnique({
-			where: { id: accountId },
-		})
+		const [account] = await this.database.db
+			.select()
+			.from(schema.accounts)
+			.where(eq(schema.accounts.id, accountId))
+			.limit(1)
 
 		return {
 			...updatedProfile,

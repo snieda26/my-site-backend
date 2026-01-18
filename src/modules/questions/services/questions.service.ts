@@ -1,207 +1,228 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common'
+/**
+ * Questions Service (Drizzle Implementation)
+ * Handles business logic for interview questions
+ * @module modules/questions/services
+ */
+
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { DatabaseService } from '@core/database/database.service'
+import { eq, and, or, like, desc, asc, sql, SQL } from 'drizzle-orm'
+import * as schema from '@core/database/schema'
+import { createPaginatedResult, PaginationDto } from '@common/dto/pagination.dto'
 import { FilterQueryDto } from '@common/dto/query.dto'
-import { createPaginatedResult } from '@common/dto/pagination.dto'
 import { CreateQuestionDto, UpdateQuestionDto } from '../dto/question.dto'
 
 @Injectable()
 export class QuestionsService {
-	constructor(private readonly db: DatabaseService) {}
+	constructor(private readonly database: DatabaseService) {}
 
+	/**
+	 * Get all questions with pagination, search, and filters
+	 */
 	async findAll(query: FilterQueryDto) {
-		const { page, limit, search, category, difficulty, sortBy, sortOrder } = query
-		const skip = (page - 1) * limit
+		const { page, limit, search, category, difficulty, sortBy = 'order', sortOrder = 'asc' } = query
+		const offset = (page - 1) * limit
 
-		const where: any = {}
+		// Побудова умов WHERE
+		const conditions: SQL<unknown>[] = []
 
+		// Пошук по заголовкам та контенту
 		if (search) {
-			where.OR = [
-				{ titleEn: { contains: search, mode: 'insensitive' } },
-				{ titleUa: { contains: search, mode: 'insensitive' } },
-				{ contentMarkdownEn: { contains: search, mode: 'insensitive' } },
-				{ contentMarkdownUa: { contains: search, mode: 'insensitive' } },
-			]
+			const searchCondition = or(
+				like(schema.questions.titleEn, `%${search}%`),
+				like(schema.questions.titleUa, `%${search}%`),
+				like(schema.questions.contentMarkdownEn, `%${search}%`),
+				like(schema.questions.contentMarkdownUa, `%${search}%`)
+			)
+			if (searchCondition) {
+				conditions.push(searchCondition)
+			}
 		}
 
-		if (category) {
-			where.category = { slug: category }
-		}
-
+		// Фільтр по складності
 		if (difficulty) {
-			where.difficulty = difficulty
+			conditions.push(eq(schema.questions.difficulty, difficulty))
 		}
 
-		const orderBy: any = {}
-		if (sortBy) {
-			orderBy[sortBy] = sortOrder
-		} else {
-			orderBy.order = 'asc'
+		// Фільтр по категорії
+		if (category) {
+			const [cat] = await this.database.db
+				.select({ id: schema.categories.id })
+				.from(schema.categories)
+				.where(eq(schema.categories.slug, category))
+				.limit(1)
+
+			if (cat) {
+				conditions.push(eq(schema.questions.categoryId, cat.id))
+			}
 		}
 
-		const [questions, total] = await Promise.all([
-			this.db.question.findMany({
-				where,
-				skip,
-				take: limit,
-				orderBy,
-				include: {
-					category: {
-						select: { id: true, slug: true, nameEn: true, nameUa: true, color: true },
-					},
-					tags: true,
-				},
-			}),
-			this.db.question.count({ where }),
+		// Об'єднання умов
+		const whereClause = conditions.length > 0 ? and(...conditions) : undefined
+
+		// Визначення сортування
+		const orderByColumn = sortBy === 'createdAt' ? schema.questions.createdAt :
+			sortBy === 'order' ? schema.questions.order :
+			sortBy === 'difficulty' ? schema.questions.difficulty :
+			schema.questions.order
+
+		const orderByClause = sortOrder === 'desc' ? desc(orderByColumn) : asc(orderByColumn)
+
+		// Виконання запиту з пагінацією
+		const [questions, [{ count }]] = await Promise.all([
+			this.database.db
+				.select()
+				.from(schema.questions)
+				.leftJoin(schema.categories, eq(schema.questions.categoryId, schema.categories.id))
+				.where(whereClause)
+				.orderBy(orderByClause)
+				.limit(limit)
+				.offset(offset),
+			
+			this.database.db
+				.select({ count: sql<number>`count(*)` })
+				.from(schema.questions)
+				.where(whereClause),
 		])
 
-		return createPaginatedResult(questions, total, page, limit)
+		// Маппінг результатів
+		const mappedQuestions = questions.map(({ questions: q, categories: c }) => ({
+			...q,
+			category: c ? {
+				id: c.id,
+				slug: c.slug,
+				nameEn: c.nameEn,
+				nameUa: c.nameUa,
+				color: c.color,
+			} : undefined,
+		}))
+
+		return createPaginatedResult(mappedQuestions, Number(count), page, limit)
 	}
 
-	async findByCategory(categorySlug: string, query: FilterQueryDto) {
-		const { page, limit, difficulty, sortBy, sortOrder } = query
-		const skip = (page - 1) * limit
+	/**
+	 * Get questions by category
+	 */
+	async findByCategory(categorySlug: string, query: PaginationDto) {
+		const { page, limit } = query
+		const offset = (page - 1) * limit
 
-		const category = await this.db.category.findUnique({
-			where: { slug: categorySlug },
-		})
+		// Знаходження категорії
+		const [category] = await this.database.db
+			.select()
+			.from(schema.categories)
+			.where(eq(schema.categories.slug, categorySlug))
+			.limit(1)
 
 		if (!category) {
-			throw new NotFoundException('Category not found')
+			throw new NotFoundException('Категорію не знайдено')
 		}
 
-		const where: any = { categoryId: category.id }
-
-		if (difficulty) {
-			where.difficulty = difficulty
-		}
-
-		const orderBy: any = {}
-		if (sortBy) {
-			orderBy[sortBy] = sortOrder
-		} else {
-			orderBy.order = 'asc'
-		}
-
-		const [questions, total] = await Promise.all([
-			this.db.question.findMany({
-				where,
-				skip,
-				take: limit,
-				orderBy,
-				include: {
-					category: {
-						select: { id: true, slug: true, nameEn: true, nameUa: true, color: true },
-					},
-					tags: true,
-				},
-			}),
-			this.db.question.count({ where }),
+		// Отримання питань
+		const [questions, [{ count }]] = await Promise.all([
+			this.database.db
+				.select()
+				.from(schema.questions)
+				.where(eq(schema.questions.categoryId, category.id))
+				.orderBy(asc(schema.questions.order))
+				.limit(limit)
+				.offset(offset),
+			
+			this.database.db
+				.select({ count: sql<number>`count(*)` })
+				.from(schema.questions)
+				.where(eq(schema.questions.categoryId, category.id)),
 		])
 
-		return createPaginatedResult(questions, total, page, limit)
+		return createPaginatedResult(questions, Number(count), page, limit)
 	}
 
-	async findBySlug(slug: string) {
-		const question = await this.db.question.findUnique({
-			where: { slug },
-			include: {
-				category: true,
-				tags: true,
-			},
-		})
+	/**
+	 * Get a single question by slug
+	 */
+	async findOne(slug: string) {
+		const [question] = await this.database.db
+			.select()
+			.from(schema.questions)
+			.leftJoin(schema.categories, eq(schema.questions.categoryId, schema.categories.id))
+			.where(eq(schema.questions.slug, slug))
+			.limit(1)
 
 		if (!question) {
-			throw new NotFoundException('Question not found')
+			throw new NotFoundException('Питання не знайдено')
+		}
+
+		return {
+			...question.questions,
+			category: question.categories ? {
+				id: question.categories.id,
+				slug: question.categories.slug,
+				nameEn: question.categories.nameEn,
+				nameUa: question.categories.nameUa,
+				color: question.categories.color,
+			} : undefined,
+		}
+	}
+
+	/**
+	 * Create a new question
+	 */
+	async create(dto: CreateQuestionDto) {
+		const [question] = await this.database.db
+			.insert(schema.questions)
+			.values(dto)
+			.returning()
+
+		return question
+	}
+
+	/**
+	 * Update a question
+	 */
+	async update(id: string, dto: UpdateQuestionDto) {
+		const [question] = await this.database.db
+			.update(schema.questions)
+			.set({
+				...dto,
+				updatedAt: new Date(),
+			})
+			.where(eq(schema.questions.id, id))
+			.returning()
+
+		if (!question) {
+			throw new NotFoundException('Питання не знайдено')
 		}
 
 		return question
 	}
 
-	async create(dto: CreateQuestionDto) {
-		const existing = await this.db.question.findUnique({
-			where: { slug: dto.slug },
-		})
+	/**
+	 * Delete a question
+	 */
+	async remove(id: string) {
+		const [deleted] = await this.database.db
+			.delete(schema.questions)
+			.where(eq(schema.questions.id, id))
+			.returning()
 
-		if (existing) {
-			throw new ConflictException('Question with this slug already exists')
+		if (!deleted) {
+			throw new NotFoundException('Питання не знайдено')
 		}
 
-		const { tags, ...data } = dto
-
-		return this.db.question.create({
-			data: {
-				...data,
-				tags: tags
-					? {
-							connectOrCreate: tags.map(tag => ({
-								where: { name: tag },
-								create: { name: tag },
-							})),
-						}
-					: undefined,
-			},
-			include: {
-				category: true,
-				tags: true,
-			},
-		})
+		return { message: 'Питання успішно видалено' }
 	}
 
-	async update(id: string, dto: UpdateQuestionDto) {
-		const question = await this.db.question.findUnique({
-			where: { id },
-		})
-
-		if (!question) {
-			throw new NotFoundException('Question not found')
-		}
-
-		if (dto.slug && dto.slug !== question.slug) {
-			const existing = await this.db.question.findUnique({
-				where: { slug: dto.slug },
-			})
-
-			if (existing) {
-				throw new ConflictException('Question with this slug already exists')
-			}
-		}
-
-		const { tags, ...data } = dto
-
-		return this.db.question.update({
-			where: { id },
-			data: {
-				...data,
-				tags: tags
-					? {
-							set: [],
-							connectOrCreate: tags.map(tag => ({
-								where: { name: tag },
-								create: { name: tag },
-							})),
-						}
-					: undefined,
-			},
-			include: {
-				category: true,
-				tags: true,
-			},
-		})
+	/**
+	 * Alias for findOne - for backward compatibility
+	 */
+	async findBySlug(slug: string) {
+		return this.findOne(slug)
 	}
 
+	/**
+	 * Alias for remove - for backward compatibility
+	 */
 	async delete(id: string) {
-		const question = await this.db.question.findUnique({
-			where: { id },
-		})
-
-		if (!question) {
-			throw new NotFoundException('Question not found')
-		}
-
-		await this.db.question.delete({
-			where: { id },
-		})
-
-		return { message: 'Question deleted successfully' }
+		return this.remove(id)
 	}
 }

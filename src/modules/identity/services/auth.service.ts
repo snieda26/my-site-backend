@@ -9,19 +9,24 @@ import { TokenService } from './token.service'
 import { MailService } from './mail.service'
 import { RegisterDto, LoginDto } from '../dto/auth.dto'
 import * as argon2 from 'argon2'
+import { eq } from 'drizzle-orm'
+import * as schema from '@core/database/schema'
 
 @Injectable()
 export class AuthService {
 	constructor(
-		private readonly db: DatabaseService,
+		private readonly database: DatabaseService,
 		private readonly tokenService: TokenService,
 		private readonly mailService: MailService
 	) {}
 
 	async register(dto: RegisterDto) {
-		const existingAccount = await this.db.account.findUnique({
-			where: { email: dto.email },
-		})
+		// Перевірка існуючого акаунту
+		const [existingAccount] = await this.database.db
+			.select()
+			.from(schema.accounts)
+			.where(eq(schema.accounts.email, dto.email))
+			.limit(1)
 
 		if (existingAccount) {
 			throw new ConflictException('Email already registered')
@@ -29,13 +34,15 @@ export class AuthService {
 
 		const hashedPassword = await argon2.hash(dto.password)
 
-		const account = await this.db.account.create({
-			data: {
+		// Створення акаунту
+		const [account] = await this.database.db
+			.insert(schema.accounts)
+			.values({
 				email: dto.email,
 				password: hashedPassword,
 				name: dto.name,
-			},
-		})
+			})
+			.returning()
 
 		this.mailService.sendVerificationEmail(account.email, account.verifyToken!).catch(error => {
 			console.error('Failed to send verification email:', error)
@@ -60,9 +67,12 @@ export class AuthService {
 	}
 
 	async login(dto: LoginDto) {
-		const account = await this.db.account.findUnique({
-			where: { email: dto.email },
-		})
+		// Знаходження акаунту
+		const [account] = await this.database.db
+			.select()
+			.from(schema.accounts)
+			.where(eq(schema.accounts.email, dto.email))
+			.limit(1)
 
 		if (!account) {
 			throw new UnauthorizedException('Invalid credentials')
@@ -96,9 +106,11 @@ export class AuthService {
 		try {
 			const payload = await this.tokenService.verifyRefreshToken(refreshToken)
 
-			const account = await this.db.account.findUnique({
-				where: { id: payload.accountId },
-			})
+			const [account] = await this.database.db
+				.select()
+				.from(schema.accounts)
+				.where(eq(schema.accounts.id, payload.accountId))
+				.limit(1)
 
 			if (!account) {
 				throw new UnauthorizedException('Account not found')
@@ -116,9 +128,11 @@ export class AuthService {
 	}
 
 	async verifyEmail(token: string) {
-		const account = await this.db.account.findUnique({
-			where: { verifyToken: token },
-		})
+		const [account] = await this.database.db
+			.select()
+			.from(schema.accounts)
+			.where(eq(schema.accounts.verifyToken, token))
+			.limit(1)
 
 		if (!account) {
 			throw new BadRequestException('Invalid verification token')
@@ -128,13 +142,14 @@ export class AuthService {
 			throw new BadRequestException('Email already verified')
 		}
 
-		await this.db.account.update({
-			where: { id: account.id },
-			data: {
+		await this.database.db
+			.update(schema.accounts)
+			.set({
 				emailVerified: true,
 				verifyToken: null,
-			},
-		})
+				updatedAt: new Date(),
+			})
+			.where(eq(schema.accounts.id, account.id))
 
 		return { message: 'Email verified successfully' }
 	}
