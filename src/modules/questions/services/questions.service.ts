@@ -152,8 +152,40 @@ export class QuestionsService {
 			throw new NotFoundException('Питання не знайдено')
 		}
 
+		// Fetch category slugs for prev/next questions if they exist
+		let prevCategorySlug: string | null = null
+		let nextCategorySlug: string | null = null
+
+		if (question.questions.prevSlug) {
+			const [prevQuestion] = await this.database.db
+				.select({
+					categorySlug: schema.categories.slug,
+				})
+				.from(schema.questions)
+				.leftJoin(schema.categories, eq(schema.questions.categoryId, schema.categories.id))
+				.where(eq(schema.questions.slug, question.questions.prevSlug))
+				.limit(1)
+
+			prevCategorySlug = prevQuestion?.categorySlug || null
+		}
+
+		if (question.questions.nextSlug) {
+			const [nextQuestion] = await this.database.db
+				.select({
+					categorySlug: schema.categories.slug,
+				})
+				.from(schema.questions)
+				.leftJoin(schema.categories, eq(schema.questions.categoryId, schema.categories.id))
+				.where(eq(schema.questions.slug, question.questions.nextSlug))
+				.limit(1)
+
+			nextCategorySlug = nextQuestion?.categorySlug || null
+		}
+
 		return {
 			...question.questions,
+			prevCategorySlug,
+			nextCategorySlug,
 			category: question.categories ? {
 				id: question.categories.id,
 				slug: question.categories.slug,

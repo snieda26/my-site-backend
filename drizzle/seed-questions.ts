@@ -231,6 +231,72 @@ async function seedQuestions() {
 		}
 
 		console.log(`✅ Успішно створено ${totalQuestions} питань!\n`)
+
+		// Оновлення prevCategorySlug та nextCategorySlug
+		console.log('🔗 Оновлення категорій для prev/next навігації...\n')
+		const allQuestions = await db.select().from(schema.questions)
+
+		for (const question of allQuestions) {
+			let prevCategorySlug: string | null = null
+			let nextCategorySlug: string | null = null
+
+			// Знайти категорію для попереднього питання
+			if (question.prevSlug) {
+				const [prevQuestion] = await db
+					.select({
+						categoryId: schema.questions.categoryId,
+					})
+					.from(schema.questions)
+					.where(eq(schema.questions.slug, question.prevSlug))
+					.limit(1)
+
+				if (prevQuestion) {
+					const [prevCategory] = await db
+						.select({ slug: schema.categories.slug })
+						.from(schema.categories)
+						.where(eq(schema.categories.id, prevQuestion.categoryId))
+						.limit(1)
+
+					prevCategorySlug = prevCategory?.slug || null
+				}
+			}
+
+			// Знайти категорію для наступного питання
+			if (question.nextSlug) {
+				const [nextQuestion] = await db
+					.select({
+						categoryId: schema.questions.categoryId,
+					})
+					.from(schema.questions)
+					.where(eq(schema.questions.slug, question.nextSlug))
+					.limit(1)
+
+				if (nextQuestion) {
+					const [nextCategory] = await db
+						.select({ slug: schema.categories.slug })
+						.from(schema.categories)
+						.where(eq(schema.categories.id, nextQuestion.categoryId))
+						.limit(1)
+
+					nextCategorySlug = nextCategory?.slug || null
+				}
+			}
+
+			// Оновити питання з категоріями
+			if (prevCategorySlug || nextCategorySlug) {
+				await db
+					.update(schema.questions)
+					.set({
+						prevCategorySlug,
+						nextCategorySlug,
+					})
+					.where(eq(schema.questions.id, question.id))
+
+				console.log(`  ✓ ${question.slug}: prev=${prevCategorySlug || 'none'}, next=${nextCategorySlug || 'none'}`)
+			}
+		}
+
+		console.log('\n✅ Категорії навігації оновлено!')
 		console.log('🎉 Seed питань завершено!')
 
 	} catch (error) {

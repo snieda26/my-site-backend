@@ -16,6 +16,8 @@ const createQuestionSchema = z.object({
 	order: z.number().int().min(0).optional(),
 	prevSlug: z.string().optional().nullable(),
 	nextSlug: z.string().optional().nullable(),
+	prevCategorySlug: z.string().optional().nullable(),
+	nextCategorySlug: z.string().optional().nullable(),
 })
 
 export class CreateQuestionDto extends createZodDto(createQuestionSchema) {
@@ -57,6 +59,12 @@ export class CreateQuestionDto extends createZodDto(createQuestionSchema) {
 
 	@ApiProperty({ example: 'next-question-slug', required: false })
 	nextSlug?: string | null
+
+	@ApiProperty({ example: 'javascript', description: 'Previous question category slug', required: false })
+	prevCategorySlug?: string | null
+
+	@ApiProperty({ example: 'javascript', description: 'Next question category slug', required: false })
+	nextCategorySlug?: string | null
 }
 
 const updateQuestionSchema = createQuestionSchema.partial()

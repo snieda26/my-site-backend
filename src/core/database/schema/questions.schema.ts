@@ -71,6 +71,8 @@ export const questions = pgTable('questions', {
 	// Navigation links
 	prevSlug: varchar('prev_slug', { length: 255 }),
 	nextSlug: varchar('next_slug', { length: 255 }),
+	prevCategorySlug: varchar('prev_category_slug', { length: 255 }),
+	nextCategorySlug: varchar('next_category_slug', { length: 255 }),
 	
 	categoryId: varchar('category_id', { length: 128 })
 		.references(() => categories.id, { onDelete: 'cascade' })
