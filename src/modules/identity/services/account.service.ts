@@ -20,6 +20,7 @@ export class AccountService {
 				id: schema.accounts.id,
 				email: schema.accounts.email,
 				name: schema.accounts.name,
+				username: schema.accounts.username,
 				avatarUrl: schema.accounts.avatarUrl,
 				emailVerified: schema.accounts.emailVerified,
 				role: schema.accounts.role,
@@ -37,6 +38,19 @@ export class AccountService {
 	}
 
 	async updateProfile(accountId: string, dto: UpdateAccountDto) {
+		// Check if username is taken by another user
+		if (dto.username) {
+			const [existingUsername] = await this.database.db
+				.select({ id: schema.accounts.id })
+				.from(schema.accounts)
+				.where(eq(schema.accounts.username, dto.username))
+				.limit(1)
+
+			if (existingUsername && existingUsername.id !== accountId) {
+				throw new BadRequestException('Username is already taken')
+			}
+		}
+
 		const [account] = await this.database.db
 			.update(schema.accounts)
 			.set({
@@ -48,6 +62,7 @@ export class AccountService {
 				id: schema.accounts.id,
 				email: schema.accounts.email,
 				name: schema.accounts.name,
+				username: schema.accounts.username,
 				avatarUrl: schema.accounts.avatarUrl,
 				emailVerified: schema.accounts.emailVerified,
 				role: schema.accounts.role,

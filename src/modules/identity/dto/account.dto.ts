@@ -4,12 +4,16 @@ import { ApiProperty } from '@nestjs/swagger'
 
 const updateAccountSchema = z.object({
 	name: z.string().min(1).max(100).optional(),
+	username: z.string().min(3).max(50).regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores').optional(),
 	avatarUrl: z.string().url().optional().nullable(),
 })
 
 export class UpdateAccountDto extends createZodDto(updateAccountSchema) {
 	@ApiProperty({ example: 'John Doe', description: 'User display name', required: false })
 	name?: string
+
+	@ApiProperty({ example: 'johndoe', description: 'Username/handle', required: false })
+	username?: string
 
 	@ApiProperty({ example: 'https://example.com/avatar.png', description: 'Avatar URL', required: false })
 	avatarUrl?: string | null

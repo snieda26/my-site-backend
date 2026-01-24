@@ -53,6 +53,7 @@ export const accounts = pgTable('accounts', {
 	email: varchar('email', { length: 255 }).unique().notNull(),
 	password: varchar('password', { length: 255 }).notNull(),
 	name: varchar('name', { length: 255 }),
+	username: varchar('username', { length: 50 }).unique(),
 	avatarUrl: varchar('avatar_url', { length: 512 }),
 	
 	emailVerified: boolean('email_verified').default(false).notNull(),
@@ -65,6 +66,7 @@ export const accounts = pgTable('accounts', {
 	updatedAt: timestamp('updated_at').defaultNow().notNull(),
 }, (table) => ({
 	emailIdx: index('accounts_email_idx').on(table.email),
+	usernameIdx: index('accounts_username_idx').on(table.username),
 }))
 
 /**
