@@ -1,211 +1,72 @@
-/**
- * Bookmarks Service - Drizzle Implementation
- * Manages user bookmarks for questions and problems
- */
-
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common'
-import { DatabaseService } from '@core/database/database.service'
-import { PaginationDto, createPaginatedResult } from '@common/dto/pagination.dto'
+import { Injectable, NotFoundException, ConflictException, Inject } from '@nestjs/common'
+import { PaginationDto } from '@common/dto/pagination.dto'
 import { CreateBookmarkDto } from '../dto/bookmark.dto'
-import { eq, and, desc, isNotNull, sql } from 'drizzle-orm'
-import * as schema from '@core/database/schema'
+import { IBookmarksRepository, BOOKMARKS_REPOSITORY } from '../repositories'
+import { IQuestionsRepository, QUESTIONS_REPOSITORY } from '@modules/questions/repositories'
+import { IProblemsRepository, PROBLEMS_REPOSITORY } from '@modules/problems/repositories'
 
 @Injectable()
 export class BookmarksService {
-	constructor(private readonly database: DatabaseService) {}
+	constructor(
+		@Inject(BOOKMARKS_REPOSITORY)
+		private readonly bookmarksRepository: IBookmarksRepository,
+		@Inject(QUESTIONS_REPOSITORY)
+		private readonly questionsRepository: IQuestionsRepository,
+		@Inject(PROBLEMS_REPOSITORY)
+		private readonly problemsRepository: IProblemsRepository
+	) {}
 
 	async findAll(accountId: string, query: PaginationDto) {
 		const { page, limit } = query
-		const offset = (page - 1) * limit
-
-		const [bookmarks, [{ count }]] = await Promise.all([
-			this.database.db
-				.select()
-				.from(schema.bookmarks)
-				.leftJoin(schema.questions, eq(schema.bookmarks.questionId, schema.questions.id))
-				.leftJoin(schema.categories, eq(schema.questions.categoryId, schema.categories.id))
-				.leftJoin(schema.problems, eq(schema.bookmarks.problemId, schema.problems.id))
-				.where(eq(schema.bookmarks.accountId, accountId))
-				.orderBy(desc(schema.bookmarks.createdAt))
-				.limit(limit)
-				.offset(offset),
-			
-			this.database.db
-				.select({ count: sql<number>`count(*)` })
-				.from(schema.bookmarks)
-				.where(eq(schema.bookmarks.accountId, accountId)),
-		])
-
-		return createPaginatedResult(bookmarks, Number(count), page, limit)
+		return this.bookmarksRepository.findAll(accountId, page, limit)
 	}
 
 	async getQuestionBookmarks(accountId: string, query: PaginationDto) {
 		const { page, limit } = query
-		const offset = (page - 1) * limit
-
-		const [bookmarks, [{ count }]] = await Promise.all([
-			this.database.db
-				.select()
-				.from(schema.bookmarks)
-				.leftJoin(schema.questions, eq(schema.bookmarks.questionId, schema.questions.id))
-				.leftJoin(schema.categories, eq(schema.questions.categoryId, schema.categories.id))
-				.where(
-					and(
-						eq(schema.bookmarks.accountId, accountId),
-						isNotNull(schema.bookmarks.questionId)
-					)
-				)
-				.orderBy(desc(schema.bookmarks.createdAt))
-				.limit(limit)
-				.offset(offset),
-			
-			this.database.db
-				.select({ count: sql<number>`count(*)` })
-				.from(schema.bookmarks)
-				.where(
-					and(
-						eq(schema.bookmarks.accountId, accountId),
-						isNotNull(schema.bookmarks.questionId)
-					)
-				),
-		])
-
-		const questions = bookmarks
-			.map(({ questions: q, categories: c }) => 
-				q ? {
-					...q,
-					category: c ? {
-						id: c.id,
-						slug: c.slug,
-						nameEn: c.nameEn,
-						nameUa: c.nameUa,
-						color: c.color,
-					} : undefined,
-				} : null
-			)
-			.filter(q => q !== null)
-
-		return createPaginatedResult(questions, Number(count), page, limit)
+		return this.bookmarksRepository.findQuestionBookmarks(accountId, page, limit)
 	}
 
 	async getProblemBookmarks(accountId: string, query: PaginationDto) {
 		const { page, limit } = query
-		const offset = (page - 1) * limit
-
-		const [bookmarks, [{ count }]] = await Promise.all([
-			this.database.db
-				.select()
-				.from(schema.bookmarks)
-				.leftJoin(schema.problems, eq(schema.bookmarks.problemId, schema.problems.id))
-				.where(
-					and(
-						eq(schema.bookmarks.accountId, accountId),
-						isNotNull(schema.bookmarks.problemId)
-					)
-				)
-				.orderBy(desc(schema.bookmarks.createdAt))
-				.limit(limit)
-				.offset(offset),
-			
-			this.database.db
-				.select({ count: sql<number>`count(*)` })
-				.from(schema.bookmarks)
-				.where(
-					and(
-						eq(schema.bookmarks.accountId, accountId),
-						isNotNull(schema.bookmarks.problemId)
-					)
-				),
-		])
-
-		const problems = bookmarks
-			.map(({ problems: p }) => p)
-			.filter(p => p !== null)
-
-		return createPaginatedResult(problems, Number(count), page, limit)
+		return this.bookmarksRepository.findProblemBookmarks(accountId, page, limit)
 	}
 
 	async create(accountId: string, dto: CreateBookmarkDto) {
-		// Validate question if provided
 		if (dto.questionId) {
-			const [existing] = await this.database.db
-				.select()
-				.from(schema.bookmarks)
-				.where(
-					and(
-						eq(schema.bookmarks.accountId, accountId),
-						eq(schema.bookmarks.questionId, dto.questionId)
-					)
-				)
-				.limit(1)
-
+			const existing = await this.bookmarksRepository.findByAccountAndQuestion(accountId, dto.questionId)
 			if (existing) {
 				throw new ConflictException('Question already bookmarked')
 			}
 
-			const [question] = await this.database.db
-				.select()
-				.from(schema.questions)
-				.where(eq(schema.questions.id, dto.questionId))
-				.limit(1)
-
+			const question = await this.questionsRepository.findById(dto.questionId)
 			if (!question) {
 				throw new NotFoundException('Question not found')
 			}
 		}
 
-		// Validate problem if provided
 		if (dto.problemId) {
-			const [existing] = await this.database.db
-				.select()
-				.from(schema.bookmarks)
-				.where(
-					and(
-						eq(schema.bookmarks.accountId, accountId),
-						eq(schema.bookmarks.problemId, dto.problemId)
-					)
-				)
-				.limit(1)
-
+			const existing = await this.bookmarksRepository.findByAccountAndProblem(accountId, dto.problemId)
 			if (existing) {
 				throw new ConflictException('Problem already bookmarked')
 			}
 
-			const [problem] = await this.database.db
-				.select()
-				.from(schema.problems)
-				.where(eq(schema.problems.id, dto.problemId))
-				.limit(1)
-
+			const problem = await this.problemsRepository.findById(dto.problemId)
 			if (!problem) {
 				throw new NotFoundException('Problem not found')
 			}
 		}
 
-		const [bookmark] = await this.database.db
-			.insert(schema.bookmarks)
-			.values({
-				accountId,
-				questionId: dto.questionId || null,
-				problemId: dto.problemId || null,
-			})
-			.returning()
-
-		return bookmark
+		return this.bookmarksRepository.create({
+			accountId,
+			questionId: dto.questionId || null,
+			problemId: dto.problemId || null,
+		})
 	}
 
 	async delete(accountId: string, id: string) {
-		const [bookmark] = await this.database.db
-			.delete(schema.bookmarks)
-			.where(
-				and(
-					eq(schema.bookmarks.id, id),
-					eq(schema.bookmarks.accountId, accountId)
-				)
-			)
-			.returning()
+		const deleted = await this.bookmarksRepository.delete(accountId, id)
 
-		if (!bookmark) {
+		if (!deleted) {
 			throw new NotFoundException('Bookmark not found')
 		}
 

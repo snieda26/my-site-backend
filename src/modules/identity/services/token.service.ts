@@ -26,14 +26,14 @@ export class TokenService {
 	async generateAccessToken(payload: TokenPayload): Promise<string> {
 		return this.jwt.signAsync(payload, {
 			secret: this.config.getOrThrow('JWT_ACCESS_SECRET'),
-			expiresIn: '15m',
+			expiresIn: this.config.get('JWT_ACCESS_EXPIRES_IN', '15m'),
 		})
 	}
 
 	async generateRefreshToken(payload: TokenPayload): Promise<string> {
 		return this.jwt.signAsync(payload, {
 			secret: this.config.getOrThrow('JWT_REFRESH_SECRET'),
-			expiresIn: '7d',
+			expiresIn: this.config.get('JWT_REFRESH_EXPIRES_IN', '7d'),
 		})
 	}
 

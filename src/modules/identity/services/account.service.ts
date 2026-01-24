@@ -1,86 +1,61 @@
-/**
- * Account Service - Drizzle Implementation
- * Manages user account operations
- */
-
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common'
-import { DatabaseService } from '@core/database/database.service'
+import { Injectable, BadRequestException, NotFoundException, Inject } from '@nestjs/common'
 import { UpdateAccountDto, ChangePasswordDto } from '../dto/account.dto'
+import { ACCOUNTS_REPOSITORY, IAccountsRepository } from '../repositories'
 import * as argon2 from 'argon2'
-import { eq } from 'drizzle-orm'
-import * as schema from '@core/database/schema'
 
 @Injectable()
 export class AccountService {
-	constructor(private readonly database: DatabaseService) {}
+	constructor(
+		@Inject(ACCOUNTS_REPOSITORY)
+		private readonly accountsRepository: IAccountsRepository
+	) {}
 
 	async getProfile(accountId: string) {
-		const [account] = await this.database.db
-			.select({
-				id: schema.accounts.id,
-				email: schema.accounts.email,
-				name: schema.accounts.name,
-				username: schema.accounts.username,
-				avatarUrl: schema.accounts.avatarUrl,
-				emailVerified: schema.accounts.emailVerified,
-				role: schema.accounts.role,
-				createdAt: schema.accounts.createdAt,
-			})
-			.from(schema.accounts)
-			.where(eq(schema.accounts.id, accountId))
-			.limit(1)
+		const account = await this.accountsRepository.findById(accountId)
 
 		if (!account) {
 			throw new NotFoundException('Account not found')
 		}
 
-		return account
+		return {
+			id: account.id,
+			email: account.email,
+			name: account.name,
+			username: account.username,
+			avatarUrl: account.avatarUrl,
+			emailVerified: account.emailVerified,
+			role: account.role,
+			createdAt: account.createdAt,
+		}
 	}
 
 	async updateProfile(accountId: string, dto: UpdateAccountDto) {
-		// Check if username is taken by another user
 		if (dto.username) {
-			const [existingUsername] = await this.database.db
-				.select({ id: schema.accounts.id })
-				.from(schema.accounts)
-				.where(eq(schema.accounts.username, dto.username))
-				.limit(1)
-
+			const existingUsername = await this.accountsRepository.findByUsername(dto.username)
 			if (existingUsername && existingUsername.id !== accountId) {
 				throw new BadRequestException('Username is already taken')
 			}
 		}
 
-		const [account] = await this.database.db
-			.update(schema.accounts)
-			.set({
-				...dto,
-				updatedAt: new Date(),
-			})
-			.where(eq(schema.accounts.id, accountId))
-			.returning({
-				id: schema.accounts.id,
-				email: schema.accounts.email,
-				name: schema.accounts.name,
-				username: schema.accounts.username,
-				avatarUrl: schema.accounts.avatarUrl,
-				emailVerified: schema.accounts.emailVerified,
-				role: schema.accounts.role,
-			})
+		const account = await this.accountsRepository.update(accountId, dto)
 
 		if (!account) {
 			throw new NotFoundException('Account not found')
 		}
 
-		return account
+		return {
+			id: account.id,
+			email: account.email,
+			name: account.name,
+			username: account.username,
+			avatarUrl: account.avatarUrl,
+			emailVerified: account.emailVerified,
+			role: account.role,
+		}
 	}
 
 	async changePassword(accountId: string, dto: ChangePasswordDto) {
-		const [account] = await this.database.db
-			.select()
-			.from(schema.accounts)
-			.where(eq(schema.accounts.id, accountId))
-			.limit(1)
+		const account = await this.accountsRepository.findById(accountId)
 
 		if (!account) {
 			throw new NotFoundException('Account not found')
@@ -94,13 +69,7 @@ export class AccountService {
 
 		const hashedPassword = await argon2.hash(dto.newPassword)
 
-		await this.database.db
-			.update(schema.accounts)
-			.set({ 
-				password: hashedPassword,
-				updatedAt: new Date(),
-			})
-			.where(eq(schema.accounts.id, accountId))
+		await this.accountsRepository.update(accountId, { password: hashedPassword })
 
 		return { message: 'Password changed successfully' }
 	}

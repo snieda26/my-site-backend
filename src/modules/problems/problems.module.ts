@@ -7,10 +7,34 @@ import { CompaniesController } from './controllers/companies.controller'
 import { ProblemsService } from './services/problems.service'
 import { CompaniesService } from './services/companies.service'
 
+import {
+	ProblemsRepository,
+	SolvedProblemsRepository,
+	CompaniesRepository,
+	PROBLEMS_REPOSITORY,
+	SOLVED_PROBLEMS_REPOSITORY,
+	COMPANIES_REPOSITORY,
+} from './repositories'
+
 @Module({
 	imports: [IdentityModule],
 	controllers: [ProblemsController, CompaniesController],
-	providers: [ProblemsService, CompaniesService],
-	exports: [ProblemsService],
+	providers: [
+		ProblemsService,
+		CompaniesService,
+		{
+			provide: PROBLEMS_REPOSITORY,
+			useClass: ProblemsRepository,
+		},
+		{
+			provide: SOLVED_PROBLEMS_REPOSITORY,
+			useClass: SolvedProblemsRepository,
+		},
+		{
+			provide: COMPANIES_REPOSITORY,
+			useClass: CompaniesRepository,
+		},
+	],
+	exports: [ProblemsService, PROBLEMS_REPOSITORY],
 })
 export class ProblemsModule {}

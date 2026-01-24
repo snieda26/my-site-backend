@@ -7,10 +7,17 @@ import { jwtConfig } from '@core/config/jwt.config'
 import { AuthController } from './controllers/auth.controller'
 import { AccountController } from './controllers/account.controller'
 
-import { AuthService } from './services/auth.service'
-import { TokenService } from './services/token.service'
-import { AccountService } from './services/account.service'
-import { MailService } from './services/mail.service'
+import {
+	AuthService,
+	RegistrationService,
+	AuthenticationService,
+	EmailVerificationService,
+	TokenService,
+	AccountService,
+	MailService,
+} from './services'
+
+import { AccountsRepository, ACCOUNTS_REPOSITORY } from './repositories'
 
 @Module({
 	imports: [
@@ -21,7 +28,19 @@ import { MailService } from './services/mail.service'
 		}),
 	],
 	controllers: [AuthController, AccountController],
-	providers: [AuthService, TokenService, AccountService, MailService],
-	exports: [JwtModule, TokenService, AccountService],
+	providers: [
+		AuthService,
+		RegistrationService,
+		AuthenticationService,
+		EmailVerificationService,
+		TokenService,
+		AccountService,
+		MailService,
+		{
+			provide: ACCOUNTS_REPOSITORY,
+			useClass: AccountsRepository,
+		},
+	],
+	exports: [JwtModule, TokenService, AccountService, AuthService, ACCOUNTS_REPOSITORY],
 })
 export class IdentityModule {}

@@ -1,73 +1,29 @@
-/**
- * Problems Service - Drizzle Implementation
- * Manages coding problems and solutions
- */
-
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common'
-import { DatabaseService } from '@core/database/database.service'
+import { Injectable, NotFoundException, ConflictException, Inject } from '@nestjs/common'
 import { FilterQueryDto } from '@common/dto/query.dto'
-import { createPaginatedResult } from '@common/dto/pagination.dto'
 import { CreateProblemDto, UpdateProblemDto, SubmitSolutionDto } from '../dto/problem.dto'
-import { eq, and, or, like, desc, asc, sql, SQL } from 'drizzle-orm'
-import * as schema from '@core/database/schema'
+import {
+	IProblemsRepository,
+	ISolvedProblemsRepository,
+	PROBLEMS_REPOSITORY,
+	SOLVED_PROBLEMS_REPOSITORY,
+} from '../repositories'
 
 @Injectable()
 export class ProblemsService {
-	constructor(private readonly database: DatabaseService) {}
+	constructor(
+		@Inject(PROBLEMS_REPOSITORY)
+		private readonly problemsRepository: IProblemsRepository,
+		@Inject(SOLVED_PROBLEMS_REPOSITORY)
+		private readonly solvedProblemsRepository: ISolvedProblemsRepository
+	) {}
 
 	async findAll(query: FilterQueryDto) {
-		const { page, limit, search, difficulty, sortBy = 'createdAt', sortOrder = 'desc' } = query
-		const offset = (page - 1) * limit
-
-		// Build WHERE conditions
-		const conditions: SQL[] = []
-
-		if (search) {
-			conditions.push(
-				or(
-					like(schema.problems.title, `%${search}%`),
-					like(schema.problems.description, `%${search}%`)
-				)!
-			)
-		}
-
-		if (difficulty) {
-			conditions.push(eq(schema.problems.difficulty, difficulty))
-		}
-
-		const whereClause = conditions.length > 0 ? and(...conditions) : undefined
-
-		// Determine sorting
-		const orderByColumn = sortBy === 'createdAt' ? schema.problems.createdAt :
-			sortBy === 'difficulty' ? schema.problems.difficulty :
-			schema.problems.createdAt
-
-		const orderByClause = sortOrder === 'desc' ? desc(orderByColumn) : asc(orderByColumn)
-
-		const [problems, [{ count }]] = await Promise.all([
-			this.database.db
-				.select()
-				.from(schema.problems)
-				.where(whereClause)
-				.orderBy(orderByClause)
-				.limit(limit)
-				.offset(offset),
-			
-			this.database.db
-				.select({ count: sql<number>`count(*)` })
-				.from(schema.problems)
-				.where(whereClause),
-		])
-
-		return createPaginatedResult(problems, Number(count), page, limit)
+		const { page, limit, search, difficulty, sortBy, sortOrder } = query
+		return this.problemsRepository.findAll(page, limit, { search, difficulty, sortBy, sortOrder })
 	}
 
 	async findBySlug(slug: string) {
-		const [problem] = await this.database.db
-			.select()
-			.from(schema.problems)
-			.where(eq(schema.problems.slug, slug))
-			.limit(1)
+		const problem = await this.problemsRepository.findBySlug(slug)
 
 		if (!problem) {
 			throw new NotFoundException('Problem not found')
@@ -77,69 +33,36 @@ export class ProblemsService {
 	}
 
 	async create(dto: CreateProblemDto) {
-		const [existing] = await this.database.db
-			.select()
-			.from(schema.problems)
-			.where(eq(schema.problems.slug, dto.slug))
-			.limit(1)
+		const existing = await this.problemsRepository.findBySlug(dto.slug)
 
 		if (existing) {
 			throw new ConflictException('Problem with this slug already exists')
 		}
 
 		const { tags, companyIds, ...data } = dto
-
-		// Use transaction for complex insert
-		const [problem] = await this.database.db
-			.insert(schema.problems)
-			.values(data)
-			.returning()
-
-		return problem
+		return this.problemsRepository.create(data)
 	}
 
 	async update(id: string, dto: UpdateProblemDto) {
-		const [problem] = await this.database.db
-			.select()
-			.from(schema.problems)
-			.where(eq(schema.problems.id, id))
-			.limit(1)
+		const problem = await this.problemsRepository.findById(id)
 
 		if (!problem) {
 			throw new NotFoundException('Problem not found')
 		}
 
 		if (dto.slug && dto.slug !== problem.slug) {
-			const [existing] = await this.database.db
-				.select()
-				.from(schema.problems)
-				.where(eq(schema.problems.slug, dto.slug))
-				.limit(1)
-
+			const existing = await this.problemsRepository.findBySlug(dto.slug)
 			if (existing) {
 				throw new ConflictException('Problem with this slug already exists')
 			}
 		}
 
 		const { tags, companyIds, ...data } = dto
-
-		const [updated] = await this.database.db
-			.update(schema.problems)
-			.set({
-				...data,
-				updatedAt: new Date(),
-			})
-			.where(eq(schema.problems.id, id))
-			.returning()
-
-		return updated
+		return this.problemsRepository.update(id, data)
 	}
 
 	async delete(id: string) {
-		const [deleted] = await this.database.db
-			.delete(schema.problems)
-			.where(eq(schema.problems.id, id))
-			.returning()
+		const deleted = await this.problemsRepository.delete(id)
 
 		if (!deleted) {
 			throw new NotFoundException('Problem not found')
@@ -149,51 +72,25 @@ export class ProblemsService {
 	}
 
 	async submitSolution(slug: string, accountId: string, dto: SubmitSolutionDto) {
-		const [problem] = await this.database.db
-			.select()
-			.from(schema.problems)
-			.where(eq(schema.problems.slug, slug))
-			.limit(1)
+		const problem = await this.problemsRepository.findBySlug(slug)
 
 		if (!problem) {
 			throw new NotFoundException('Problem not found')
 		}
 
-		// Check if solution exists
-		const [existing] = await this.database.db
-			.select()
-			.from(schema.solvedProblems)
-			.where(
-				and(
-					eq(schema.solvedProblems.accountId, accountId),
-					eq(schema.solvedProblems.problemId, problem.id)
-				)
-			)
-			.limit(1)
+		const existing = await this.solvedProblemsRepository.findByAccountAndProblem(accountId, problem.id)
 
-		let solved: typeof schema.solvedProblems.$inferSelect
+		let solved: { status: string }
 
 		if (existing) {
-			// Update existing solution
-			[solved] = await this.database.db
-				.update(schema.solvedProblems)
-				.set({
-					code: dto.code,
-					solvedAt: new Date(),
-				})
-				.where(eq(schema.solvedProblems.id, existing.id))
-				.returning()
+			solved = await this.solvedProblemsRepository.update(existing.id, { code: dto.code }) as { status: string }
 		} else {
-			// Create new solution
-			[solved] = await this.database.db
-				.insert(schema.solvedProblems)
-				.values({
-					accountId,
-					problemId: problem.id,
-					code: dto.code,
-					status: 'ATTEMPTED',
-				})
-				.returning()
+			solved = await this.solvedProblemsRepository.create({
+				accountId,
+				problemId: problem.id,
+				code: dto.code,
+				status: 'ATTEMPTED',
+			})
 		}
 
 		return {

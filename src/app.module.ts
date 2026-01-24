@@ -5,10 +5,11 @@ import { GoogleRecaptchaModule } from '@nestlab/google-recaptcha'
 import { join } from 'path'
 
 import { DatabaseModule } from '@core/database/database.module'
+import { HealthModule } from '@core/health'
+import { LoggingModule } from '@core/logging'
 import { recaptchaConfig } from '@core/config/recaptcha.config'
 
 import { IdentityModule } from '@modules/identity/identity.module'
-import { OnboardingModule } from '@modules/onboarding/onboarding.module'
 import { QuestionsModule } from '@modules/questions/questions.module'
 import { ProblemsModule } from '@modules/problems/problems.module'
 import { ProgressModule } from '@modules/progress/progress.module'
@@ -19,27 +20,22 @@ import { ProgressModule } from '@modules/progress/progress.module'
 			isGlobal: true,
 			envFilePath: '.env',
 		}),
-
 		ServeStaticModule.forRoot({
 			rootPath: join(process.cwd(), 'storage'),
 			serveRoot: '/storage',
 		}),
-
 		GoogleRecaptchaModule.forRootAsync({
 			imports: [ConfigModule],
 			inject: [ConfigService],
 			useFactory: recaptchaConfig,
 		}),
-
-	DatabaseModule,
-
-	IdentityModule,
-	// TEMPORARY: OnboardingModule is imported but routes are disabled in the module
-	// TODO: Re-enable when onboarding feature is ready
-	OnboardingModule,
-	QuestionsModule,
-	ProblemsModule,
-	ProgressModule,
-],
+		DatabaseModule,
+		LoggingModule,
+		HealthModule,
+		IdentityModule,
+		QuestionsModule,
+		ProblemsModule,
+		ProgressModule,
+	],
 })
 export class AppModule {}

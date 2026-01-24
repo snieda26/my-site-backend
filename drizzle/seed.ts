@@ -1,48 +1,30 @@
-/**
- * Drizzle Database Seeding Script
- * Seeds the database with initial data
- * @usage: yarn db:seed
- */
-
 import { drizzle } from 'drizzle-orm/postgres-js'
 import * as argon2 from 'argon2'
 import * as dotenv from 'dotenv'
 import * as schema from '../src/core/database/schema'
-import { eq } from 'drizzle-orm'
 
-// Import postgres using require for CommonJS compatibility
 const postgres = require('postgres')
 
-// Load environment variables
 dotenv.config({ path: '.env' })
 
 let connectionString = process.env.DATABASE_URL
 
 if (!connectionString) {
-	throw new Error('DATABASE_URL не встановлено')
+	throw new Error('DATABASE_URL is not set')
 }
 
-// Remove everything after ? (query parameters not supported by postgres.js)
 connectionString = connectionString.split('?')[0]
 
 console.log(`📡 Connecting to database: ${connectionString.replace(/\/\/.*@/, '//***@')}`)
 
-// Створення підключення
 const client = postgres(connectionString)
 const db = drizzle(client, { schema })
 
-/**
- * Main Seed Function
- * Populate database with initial data
- */
 async function seed() {
-	console.log('🌱 Початок seed процесу...\n')
+	console.log('🌱 Starting seed process...\n')
 
 	try {
-		// ============================================
-		// 1. ADMIN ACCOUNT
-		// ============================================
-		console.log('👤 Створення адміністратора...')
+		console.log('👤 Creating admin account...')
 		
 		const hashedPassword = await argon2.hash('Admin123!')
 		
@@ -54,18 +36,14 @@ async function seed() {
 				name: 'Admin',
 				emailVerified: true,
 				role: 'ADMIN',
-				onboardingCompleted: true,
 				createdAt: new Date(),
 				updatedAt: new Date(),
 			})
 			.onConflictDoNothing()
 		
-		console.log('  ✅ Адміністратор: admin@itlead.com\n')
+		console.log('  ✅ Admin: admin@itlead.com\n')
 
-		// ============================================
-		// 2. CATEGORIES
-		// ============================================
-		console.log('📚 Створення категорій...')
+		console.log('📚 Creating categories...')
 		
 		const categoriesData = [
 			{ slug: 'html-css', nameEn: 'HTML & CSS', nameUa: 'HTML & CSS', order: 1 },
@@ -90,12 +68,9 @@ async function seed() {
 			console.log(`  ✓ ${cat.nameEn} (${cat.slug})`)
 		}
 		
-		console.log(`  ✅ Створено ${categoriesData.length} категорій\n`)
+		console.log(`  ✅ Created ${categoriesData.length} categories\n`)
 
-		// ============================================
-		// 3. COMPANIES
-		// ============================================
-		console.log('🏢 Створення компаній...')
+		console.log('🏢 Creating companies...')
 		
 		const companiesData = [
 			{ name: 'EPAM' },
@@ -116,22 +91,19 @@ async function seed() {
 			console.log(`  ✓ ${company.name}`)
 		}
 		
-		console.log(`  ✅ Створено ${companiesData.length} компаній\n`)
+		console.log(`  ✅ Created ${companiesData.length} companies\n`)
 
-		console.log('🎉 Seed завершено успішно!')
-		console.log('\n📝 Для додавання питань запустіть:')
-		console.log('   yarn ts-node drizzle/seed-questions.ts')
+		console.log('🎉 Seed completed successfully!')
 
 	} catch (error) {
-		console.error('❌ Помилка seed:', error)
+		console.error('❌ Seed error:', error)
 		throw error
 	} finally {
 		await client.end()
 	}
 }
 
-// Run seed
 seed().catch((error) => {
-	console.error('Фатальна помилка:', error)
+	console.error('Fatal error:', error)
 	process.exit(1)
 })

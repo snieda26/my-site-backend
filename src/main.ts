@@ -8,10 +8,12 @@ import { ZodValidationPipe } from 'nestjs-zod'
 import { AppModule } from './app.module'
 import { DatabaseService } from '@core/database/database.service'
 import { HttpExceptionFilter } from '@common/filters/http-exception.filter'
+import { validateEnv } from '@core/config/env.validation'
 
 async function bootstrap() {
-	const app = await NestFactory.create<NestExpressApplication>(AppModule)
+	validateEnv()
 
+	const app = await NestFactory.create<NestExpressApplication>(AppModule)
 	const config = app.get(ConfigService)
 	const db = app.get(DatabaseService)
 
@@ -20,7 +22,6 @@ async function bootstrap() {
 
 	app.useGlobalPipes(new ZodValidationPipe())
 	app.useGlobalFilters(new HttpExceptionFilter())
-
 	app.setGlobalPrefix('api')
 
 	const isDev = config.get('NODE_ENV') !== 'production'
@@ -32,7 +33,6 @@ async function bootstrap() {
 	)
 	app.use(cookieParser())
 
-	// Allow all origins for now (development)
 	app.enableCors({
 		origin: true,
 		credentials: true,
@@ -43,10 +43,9 @@ async function bootstrap() {
 
 	app.disable('x-powered-by')
 
-	// Swagger API Documentation Setup
 	const swaggerConfig = new DocumentBuilder()
 		.setTitle('ITLead API')
-		.setDescription('Interview preparation platform backend API documentation')
+		.setDescription('Interview preparation platform backend API')
 		.setVersion('1.0')
 		.addBearerAuth(
 			{
@@ -64,6 +63,7 @@ async function bootstrap() {
 			in: 'cookie',
 			name: 'refreshToken',
 		})
+		.addTag('Health', 'Service health checks')
 		.addTag('Authentication', 'User authentication and authorization')
 		.addTag('Account', 'User account management')
 		.addTag('Categories', 'Question categories management')
