@@ -10,7 +10,7 @@ import { IProblemsRepository, ISolvedProblemsRepository, ProblemFilters } from '
 export class ProblemsRepository implements IProblemsRepository {
 	constructor(private readonly database: DatabaseService) {}
 
-	async findAll(page: number, limit: number, filters?: ProblemFilters): Promise<PaginatedResult<Problem>> {
+	async findAll(page: number, limit: number, filters?: ProblemFilters): Promise<PaginatedResult<any>> {
 		const offset = (page - 1) * limit
 		const conditions: SQL[] = []
 
@@ -45,21 +45,49 @@ export class ProblemsRepository implements IProblemsRepository {
 				.where(whereClause),
 		])
 
+		// Fetch companies for each problem
+		const problemsWithCompanies = await Promise.all(
+			problems.map(async (problem) => {
+				const companies = await this.database.db
+					.select({ id: schema.companies.id, name: schema.companies.name })
+					.from(schema.companies)
+					.innerJoin(
+						schema.problemsToCompanies,
+						eq(schema.companies.id, schema.problemsToCompanies.companyId)
+					)
+					.where(eq(schema.problemsToCompanies.problemId, problem.id))
+
+				return { ...problem, companies }
+			})
+		)
+
 		const total = Number(count)
 		return {
-			data: problems,
+			data: problemsWithCompanies,
 			meta: { page, limit, total, totalPages: Math.ceil(total / limit) },
 		}
 	}
 
-	async findBySlug(slug: string): Promise<Problem | null> {
+	async findBySlug(slug: string): Promise<any | null> {
 		const [problem] = await this.database.db
 			.select()
 			.from(schema.problems)
 			.where(eq(schema.problems.slug, slug))
 			.limit(1)
 
-		return problem || null
+		if (!problem) return null
+
+		// Fetch companies for the problem
+		const companies = await this.database.db
+			.select({ id: schema.companies.id, name: schema.companies.name })
+			.from(schema.companies)
+			.innerJoin(
+				schema.problemsToCompanies,
+				eq(schema.companies.id, schema.problemsToCompanies.companyId)
+			)
+			.where(eq(schema.problemsToCompanies.problemId, problem.id))
+
+		return { ...problem, companies }
 	}
 
 	async findById(id: string): Promise<Problem | null> {

@@ -6,6 +6,7 @@ import { CompaniesController } from './controllers/companies.controller'
 
 import { ProblemsService } from './services/problems.service'
 import { CompaniesService } from './services/companies.service'
+import { CodeExecutorService } from './services/code-executor.service'
 
 import {
 	ProblemsRepository,
@@ -22,6 +23,7 @@ import {
 	providers: [
 		ProblemsService,
 		CompaniesService,
+		CodeExecutorService,
 		{
 			provide: PROBLEMS_REPOSITORY,
 			useClass: ProblemsRepository,

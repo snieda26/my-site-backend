@@ -7,6 +7,7 @@ import {
 	PROBLEMS_REPOSITORY,
 	SOLVED_PROBLEMS_REPOSITORY,
 } from '../repositories'
+import { CodeExecutorService } from './code-executor.service'
 
 @Injectable()
 export class ProblemsService {
@@ -14,7 +15,8 @@ export class ProblemsService {
 		@Inject(PROBLEMS_REPOSITORY)
 		private readonly problemsRepository: IProblemsRepository,
 		@Inject(SOLVED_PROBLEMS_REPOSITORY)
-		private readonly solvedProblemsRepository: ISolvedProblemsRepository
+		private readonly solvedProblemsRepository: ISolvedProblemsRepository,
+		private readonly codeExecutorService: CodeExecutorService
 	) {}
 
 	async findAll(query: FilterQueryDto) {
@@ -96,6 +98,26 @@ export class ProblemsService {
 		return {
 			message: 'Solution submitted successfully',
 			status: solved.status,
+		}
+	}
+
+	async runCode(slug: string, code: string) {
+		const problem = await this.problemsRepository.findBySlug(slug)
+
+		if (!problem) {
+			throw new NotFoundException('Problem not found')
+		}
+
+		if (!problem.testCases) {
+			throw new NotFoundException('No test cases available for this problem')
+		}
+
+		const result = await this.codeExecutorService.executeCode(code, problem.testCases)
+
+		return {
+			...result,
+			totalTests: result.testResults.length,
+			passedTests: result.testResults.filter(r => r.passed).length,
 		}
 	}
 }

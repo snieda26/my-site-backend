@@ -50,6 +50,7 @@
 		"postgres": "^3.4.8",
 		"reflect-metadata": "^0.2.2",
 		"rxjs": "^7.8.2",
+		"vm2": "^3.10.2",
 		"zod": "^3.25.56"
 	},
 	"devDependencies": {

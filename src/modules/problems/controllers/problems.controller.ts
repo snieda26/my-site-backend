@@ -68,4 +68,12 @@ export class ProblemsController {
 	) {
 		return this.problemsService.submitSolution(slug, accountId, dto)
 	}
+
+	@Post(':slug/run')
+	@ApiOperation({ summary: 'Run code against test cases (no auth required)' })
+	@ApiParam({ name: 'slug', description: 'Problem slug' })
+	@ApiResponse({ status: 200, description: 'Code executed successfully' })
+	async runCode(@Param('slug') slug: string, @Body() dto: { code: string }) {
+		return this.problemsService.runCode(slug, dto.code)
+	}
 }
