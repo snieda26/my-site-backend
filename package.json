@@ -23,7 +23,8 @@
 		"db:seed": "tsx drizzle/seed.ts",
 		"import:questions": "tsx scripts/import-questions.ts",
 		"translate:questions": "tsx scripts/translate-with-api.ts",
-		"translate:test": "tsx scripts/translate-with-api.ts --dry-run --limit=3"
+		"translate:test": "tsx scripts/translate-with-api.ts --dry-run --limit=3",
+		"fix:navigation": "tsx scripts/fix-question-navigation.ts"
 	},
 	"dependencies": {
 		"@faker-js/faker": "^9.3.0",

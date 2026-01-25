@@ -35,6 +35,7 @@ export class AuthenticationService {
 				id: account.id,
 				email: account.email,
 				name: account.name,
+				username: account.username,
 				avatarUrl: account.avatarUrl,
 				emailVerified: account.emailVerified,
 			},
