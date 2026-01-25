@@ -24,7 +24,7 @@ export class ProblemsRepository implements IProblemsRepository {
 		}
 
 		if (filters?.difficulty) {
-			conditions.push(eq(schema.problems.difficulty, filters.difficulty as 'EASY' | 'MEDIUM' | 'HARD'))
+			conditions.push(eq(schema.problems.difficulty, filters.difficulty as 'JUNIOR' | 'MIDDLE' | 'SENIOR'))
 		}
 
 		const whereClause = conditions.length > 0 ? and(...conditions) : undefined
@@ -141,6 +141,38 @@ export class SolvedProblemsRepository implements ISolvedProblemsRepository {
 				and(
 					eq(schema.solvedProblems.accountId, accountId),
 					eq(schema.solvedProblems.problemId, problemId)
+				)
+			)
+			.limit(1)
+
+		return solved || null
+	}
+
+	async findByAccount(accountId: string): Promise<SolvedProblem[]> {
+		const solved = await this.database.db
+			.select()
+			.from(schema.solvedProblems)
+			.where(eq(schema.solvedProblems.accountId, accountId))
+
+		return solved
+	}
+
+	async findByAccountAndProblemSlug(accountId: string, slug: string): Promise<SolvedProblem | null> {
+		const [solved] = await this.database.db
+			.select({
+				id: schema.solvedProblems.id,
+				accountId: schema.solvedProblems.accountId,
+				problemId: schema.solvedProblems.problemId,
+				code: schema.solvedProblems.code,
+				status: schema.solvedProblems.status,
+				solvedAt: schema.solvedProblems.solvedAt,
+			})
+			.from(schema.solvedProblems)
+			.innerJoin(schema.problems, eq(schema.solvedProblems.problemId, schema.problems.id))
+			.where(
+				and(
+					eq(schema.solvedProblems.accountId, accountId),
+					eq(schema.problems.slug, slug)
 				)
 			)
 			.limit(1)

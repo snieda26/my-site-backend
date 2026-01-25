@@ -28,7 +28,7 @@ const questions = [
     titleUa: 'Методологія BEM (Block Element Modifier)',
     descriptionEn: 'Learn about BEM naming convention for organizing and maintaining CSS code.',
     descriptionUa: 'Дізнайтесь про конвенцію іменування BEM для організації та підтримки CSS коду.',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 17,
     contentMarkdownEn: `**BEM (Block — Element — Modifier)** is a **CSS class naming methodology** created for **organization, reusability and scalability** of HTML and CSS code.
 
@@ -221,7 +221,7 @@ block__element--modifier
     titleUa: 'Схлопування Margin в CSS',
     descriptionEn: 'Understand how vertical margins collapse in CSS and how to prevent it.',
     descriptionUa: 'Зрозумійте, як вертикальні margin схлопуються в CSS та як це запобігти.',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 18,
     contentMarkdownEn: `**Margin collapsing** is a CSS feature where **vertical margins of adjacent blocks collapse** (i.e., they don't add up, but the larger one is taken).
 
@@ -384,7 +384,7 @@ If block is empty, top and bottom margins collapse into one.
     titleUa: 'Порядок Накладання в CSS',
     descriptionEn: 'Learn about CSS stacking order, z-index, and stacking contexts.',
     descriptionUa: 'Дізнайтесь про порядок накладання в CSS, z-index та контексти накладання.',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 19,
     contentMarkdownEn: `**Stacking Order** is the order in which **elements overlay each other** along the Z-axis (depth). This determines **which element will be "on top"** if they overlap.
 

@@ -1,9 +1,9 @@
-import { Controller, Post, Body, Res, HttpCode, HttpStatus, Get, Query } from '@nestjs/common'
+import { Controller, Post, Body, Res, Req, HttpCode, HttpStatus, Get, Query, UnauthorizedException } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiQuery, ApiCookieAuth } from '@nestjs/swagger'
-import { Response } from 'express'
+import { Request, Response } from 'express'
 import { Recaptcha } from '@nestlab/google-recaptcha'
 import { AuthService } from '../services/auth.service'
-import { RegisterDto, LoginDto, RefreshTokenDto } from '../dto/auth.dto'
+import { RegisterDto, LoginDto } from '../dto/auth.dto'
 
 @ApiTags('Authentication')
 @Controller('auth')
@@ -49,12 +49,17 @@ export class AuthController {
 	@Post('refresh')
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({ summary: 'Refresh access token using refresh token' })
-	@ApiBody({ type: RefreshTokenDto })
 	@ApiCookieAuth('refreshToken')
 	@ApiResponse({ status: 200, description: 'Token refreshed successfully' })
 	@ApiResponse({ status: 401, description: 'Invalid or expired refresh token' })
-	async refreshToken(@Body() dto: RefreshTokenDto, @Res({ passthrough: true }) res: Response) {
-		const result = await this.authService.refreshToken(dto.refreshToken)
+	async refreshToken(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+		const refreshToken = req.cookies?.['refreshToken']
+		
+		if (!refreshToken) {
+			throw new UnauthorizedException('Refresh token not found')
+		}
+
+		const result = await this.authService.refreshToken(refreshToken)
 
 		this.setRefreshTokenCookie(res, result.refreshToken)
 

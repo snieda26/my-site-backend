@@ -28,7 +28,7 @@ const questions = [
     titleUa: 'Властивість Display в CSS',
     descriptionEn: 'Learn about CSS display property and its various values for controlling element rendering.',
     descriptionUa: 'Дізнайтесь про властивість display в CSS та її різні значення для контролю відображення елементів.',
-    difficulty: 'EASY' as const,
+    difficulty: 'JUNIOR' as const,
     order: 8,
     contentMarkdownEn: `The **display** property in CSS controls how an element is displayed on the page. It determines whether an element will be a block, inline element, or an element with another display type.
 
@@ -147,7 +147,7 @@ const questions = [
     titleUa: 'Властивість Box-sizing в CSS',
     descriptionEn: 'Understand how box-sizing property affects element dimensions with padding and borders.',
     descriptionUa: 'Зрозумійте, як властивість box-sizing впливає на розміри елементів з padding та border.',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 9,
     contentMarkdownEn: `The **box-sizing** property in CSS determines how element dimensions are calculated, including its **padding** and **border**. It helps control how the **total width** and **height** of an element will be calculated when adding internal padding and borders.
 

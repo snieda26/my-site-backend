@@ -215,7 +215,7 @@ async function seedQuestions() {
 						contentMarkdownUa: uaDoc?.content || enDoc.content,
 						categoryId: dbCategory.id,
 						order: i + 1,
-						difficulty: 'MEDIUM',
+						difficulty: 'MIDDLE',
 						prevSlug: enDoc.frontmatter.prev,
 						nextSlug: enDoc.frontmatter.next,
 					})

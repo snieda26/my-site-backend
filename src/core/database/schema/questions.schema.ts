@@ -2,7 +2,7 @@ import { pgTable, varchar, text, integer, timestamp, pgEnum, index, primaryKey }
 import { relations } from 'drizzle-orm'
 import { createId } from '@paralleldrive/cuid2'
 
-export const difficultyEnum = pgEnum('difficulty', ['EASY', 'MEDIUM', 'HARD'])
+export const difficultyEnum = pgEnum('difficulty', ['JUNIOR', 'MIDDLE', 'SENIOR'])
 
 export const categories = pgTable('categories', {
 	id: varchar('id', { length: 128 })
@@ -32,7 +32,7 @@ export const questions = pgTable('questions', {
 	descriptionUa: text('description_ua'),
 	contentMarkdownEn: text('content_markdown_en').notNull(),
 	contentMarkdownUa: text('content_markdown_ua').notNull(),
-	difficulty: difficultyEnum('difficulty').default('MEDIUM').notNull(),
+	difficulty: difficultyEnum('difficulty').default('MIDDLE').notNull(),
 	order: integer('order').default(0).notNull(),
 	prevSlug: varchar('prev_slug', { length: 255 }),
 	nextSlug: varchar('next_slug', { length: 255 }),

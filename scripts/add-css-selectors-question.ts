@@ -217,7 +217,7 @@ async function addQuestion() {
         descriptionUa: 'Дізнайтесь про CSS селектори та як вибирати HTML елементи для стилізації.',
         contentMarkdownEn: englishContent,
         contentMarkdownUa: ukrainianContent,
-        difficulty: 'MEDIUM',
+        difficulty: 'MIDDLE',
         order: 4,
         categoryId: category.id,
       })

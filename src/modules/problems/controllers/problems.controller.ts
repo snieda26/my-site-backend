@@ -13,12 +13,21 @@ export class ProblemsController {
 
 	@Get()
 	@ApiOperation({ summary: 'Get all problems with filters' })
-	@ApiQuery({ name: 'difficulty', required: false, enum: ['EASY', 'MEDIUM', 'HARD'] })
+	@ApiQuery({ name: 'difficulty', required: false, enum: ['JUNIOR', 'MIDDLE', 'SENIOR'] })
 	@ApiQuery({ name: 'tag', required: false, description: 'Filter by tag' })
 	@ApiQuery({ name: 'search', required: false, description: 'Search in title and description' })
 	@ApiResponse({ status: 200, description: 'Problems retrieved successfully' })
 	async findAll(@Query() query: FilterQueryDto) {
 		return this.problemsService.findAll(query)
+	}
+
+	// Static routes MUST come before dynamic :slug routes
+	@Get('solved/me')
+	@Auth()
+	@ApiOperation({ summary: 'Get all problems solved by current user' })
+	@ApiResponse({ status: 200, description: 'Solved problems retrieved successfully' })
+	async getMySolvedProblems(@CurrentAccount('accountId') accountId: string) {
+		return this.problemsService.getSolvedProblems(accountId)
 	}
 
 	@Get(':slug')
@@ -28,6 +37,18 @@ export class ProblemsController {
 	@ApiResponse({ status: 404, description: 'Problem not found' })
 	async findBySlug(@Param('slug') slug: string) {
 		return this.problemsService.findBySlug(slug)
+	}
+
+	@Get(':slug/submission')
+	@Auth()
+	@ApiOperation({ summary: 'Get user submission for a specific problem' })
+	@ApiParam({ name: 'slug', description: 'Problem slug' })
+	@ApiResponse({ status: 200, description: 'Submission retrieved successfully' })
+	async getUserSubmission(
+		@Param('slug') slug: string,
+		@CurrentAccount('accountId') accountId: string
+	) {
+		return this.problemsService.getUserSubmission(slug, accountId)
 	}
 
 	@Post()

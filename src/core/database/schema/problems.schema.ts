@@ -16,7 +16,7 @@ export const problems = pgTable('problems', {
 	titleUa: varchar('title_ua', { length: 500 }),
 	description: text('description').notNull(),
 	descriptionUa: text('description_ua'),
-	difficulty: difficultyEnum('difficulty').default('MEDIUM').notNull(),
+	difficulty: difficultyEnum('difficulty').default('MIDDLE').notNull(),
 	starterCode: text('starter_code').notNull(),
 	solution: text('solution').notNull(),
 	testCases: text('test_cases').notNull(),

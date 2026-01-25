@@ -19,6 +19,8 @@ export interface IProblemsRepository {
 
 export interface ISolvedProblemsRepository {
 	findByAccountAndProblem(accountId: string, problemId: string): Promise<SolvedProblem | null>
+	findByAccount(accountId: string): Promise<SolvedProblem[]>
+	findByAccountAndProblemSlug(accountId: string, slug: string): Promise<SolvedProblem | null>
 	create(data: { accountId: string; problemId: string; code: string; status: 'ATTEMPTED' | 'SOLVED' }): Promise<SolvedProblem>
 	update(id: string, data: Partial<SolvedProblem>): Promise<SolvedProblem | null>
 }

@@ -197,7 +197,7 @@ async function addQuestion() {
         descriptionUa: 'Дізнайтесь, як специфічність CSS визначає, які стилі застосовуються до елементів.',
         contentMarkdownEn: englishContent,
         contentMarkdownUa: ukrainianContent,
-        difficulty: 'MEDIUM',
+        difficulty: 'MIDDLE',
         order: 5,
         categoryId: category.id,
       })

@@ -10,7 +10,7 @@ const createQuestionSchema = z.object({
 	descriptionUa: z.string().optional(),
 	contentMarkdownEn: z.string().min(1),
 	contentMarkdownUa: z.string().min(1),
-	difficulty: z.enum(['EASY', 'MEDIUM', 'HARD']).default('MEDIUM'),
+	difficulty: z.enum(['JUNIOR', 'MIDDLE', 'SENIOR']).default('MIDDLE'),
 	categoryId: z.string().cuid(),
 	tags: z.array(z.string()).optional(),
 	order: z.number().int().min(0).optional(),
@@ -42,8 +42,8 @@ export class CreateQuestionDto extends createZodDto(createQuestionSchema) {
 	@ApiProperty({ example: '## Що таке замикання?\n\nЗамикання - це...', description: 'Question markdown content (Ukrainian)' })
 	contentMarkdownUa: string
 
-	@ApiProperty({ enum: ['EASY', 'MEDIUM', 'HARD'], default: 'MEDIUM' })
-	difficulty: 'EASY' | 'MEDIUM' | 'HARD'
+	@ApiProperty({ enum: ['JUNIOR', 'MIDDLE', 'SENIOR'], default: 'MIDDLE' })
+	difficulty: 'JUNIOR' | 'MIDDLE' | 'SENIOR'
 
 	@ApiProperty({ example: 'clxxx123', description: 'Category ID' })
 	categoryId: string

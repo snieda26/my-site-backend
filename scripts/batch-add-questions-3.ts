@@ -28,7 +28,7 @@ const questions = [
     titleUa: 'Чому Transform Краще для Анімацій ніж Top, Left',
     descriptionEn: 'Learn why CSS transform property provides better performance for animations compared to top and left properties.',
     descriptionUa: 'Дізнайтесь, чому властивість CSS transform забезпечує кращу продуктивність для анімацій порівняно з властивостями top та left.',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 10,
     contentMarkdownEn: `When it comes to animations in CSS, using **transform** to move elements is the preferred method compared to using **top** and **left** properties. Here are several reasons why:
 
@@ -175,7 +175,7 @@ const questions = [
     titleUa: 'Семантична HTML Розмітка',
     descriptionEn: 'Learn about semantic HTML tags and why they are important for accessibility, SEO, and code maintainability.',
     descriptionUa: 'Дізнайтесь про семантичні HTML теги та чому вони важливі для доступності, SEO та підтримки коду.',
-    difficulty: 'EASY' as const,
+    difficulty: 'JUNIOR' as const,
     order: 11,
     contentMarkdownEn: `**Semantic markup** is an approach to creating HTML documents that uses tags reflecting the meaning of content. Unlike using only \`<div>\` or \`<span>\`, semantic tags give document structure more significance, making it more understandable for people, search engines, and assistive technologies.
 

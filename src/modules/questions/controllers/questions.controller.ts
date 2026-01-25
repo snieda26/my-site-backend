@@ -13,7 +13,7 @@ export class QuestionsController {
 	@Get()
 	@ApiOperation({ summary: 'Get all questions with filters' })
 	@ApiQuery({ name: 'category', required: false, description: 'Filter by category slug' })
-	@ApiQuery({ name: 'difficulty', required: false, enum: ['EASY', 'MEDIUM', 'HARD'] })
+	@ApiQuery({ name: 'difficulty', required: false, enum: ['JUNIOR', 'MIDDLE', 'SENIOR'] })
 	@ApiQuery({ name: 'search', required: false, description: 'Search in title and content' })
 	@ApiResponse({ status: 200, description: 'Questions retrieved successfully' })
 	async findAll(@Query() query: FilterQueryDto) {

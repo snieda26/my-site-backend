@@ -26,7 +26,7 @@ const sampleProblems = [
 		slug: 'two-sum',
 		title: 'Two Sum',
 		description: 'Given an array of integers `nums` and an integer `target`, return indices of the two numbers such that they add up to `target`. You may assume that each input would have exactly one solution, and you may not use the same element twice.',
-		difficulty: 'EASY' as const,
+		difficulty: 'JUNIOR' as const,
 		starterCode: `function twoSum(nums, target) {
   // Write your code here
   
@@ -57,7 +57,7 @@ const sampleProblems = [
 		slug: 'reverse-string',
 		title: 'Reverse String',
 		description: 'Write a function that reverses a string. The input string is given as an array of characters. You must do this by modifying the input array in-place with O(1) extra memory.',
-		difficulty: 'EASY' as const,
+		difficulty: 'JUNIOR' as const,
 		starterCode: `function reverseString(s) {
   // Write your code here
   
@@ -84,7 +84,7 @@ const sampleProblems = [
 		slug: 'valid-parentheses',
 		title: 'Valid Parentheses',
 		description: 'Given a string `s` containing just the characters `(`, `)`, `{`, `}`, `[` and `]`, determine if the input string is valid. An input string is valid if: 1) Open brackets must be closed by the same type of brackets. 2) Open brackets must be closed in the correct order.',
-		difficulty: 'MEDIUM' as const,
+		difficulty: 'MIDDLE' as const,
 		starterCode: `function isValid(s) {
   // Write your code here
   
@@ -122,7 +122,7 @@ const sampleProblems = [
 		slug: 'fibonacci-number',
 		title: 'Fibonacci Number',
 		description: 'The Fibonacci numbers form a sequence, where each number is the sum of the two preceding ones, starting from 0 and 1. Given `n`, calculate `F(n)`. F(0) = 0, F(1) = 1, F(n) = F(n - 1) + F(n - 2), for n > 1.',
-		difficulty: 'EASY' as const,
+		difficulty: 'JUNIOR' as const,
 		starterCode: `function fib(n) {
   // Write your code here
   
@@ -153,7 +153,7 @@ const sampleProblems = [
 		slug: 'group-anagrams',
 		title: 'Group Anagrams',
 		description: 'Given an array of strings `strs`, group the anagrams together. You can return the answer in any order. An Anagram is a word or phrase formed by rearranging the letters of a different word or phrase.',
-		difficulty: 'MEDIUM' as const,
+		difficulty: 'MIDDLE' as const,
 		starterCode: `function groupAnagrams(strs) {
   // Write your code here
   

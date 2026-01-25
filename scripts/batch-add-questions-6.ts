@@ -29,7 +29,7 @@ const questions = [
     titleUa: 'CSS-in-JS Проблеми та Рішення',
     descriptionEn: 'Understand the problems and solutions when using CSS-in-JS libraries in modern applications.',
     descriptionUa: 'Зрозумійте проблеми та рішення при використанні CSS-in-JS бібліотек у сучасних застосунках.',
-    difficulty: 'HARD' as const,
+    difficulty: 'SENIOR' as const,
     order: 20,
     contentMarkdownEn: `## What is CSS-in-JS?
 
@@ -130,7 +130,7 @@ CSS-in-JS може викликати проблеми з гідратацією
     titleUa: 'CSS Анімації та Переходи',
     descriptionEn: 'Learn about CSS properties for creating animations and smooth transitions.',
     descriptionUa: 'Дізнайтесь про CSS властивості для створення анімацій та плавних переходів.',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 21,
     contentMarkdownEn: `## Main CSS Properties for Animations and Transitions
 
@@ -265,7 +265,7 @@ CSS надає два підходи для створення візуальн�
     titleUa: 'Основні Meta-теги в HTML',
     descriptionEn: 'Learn about essential HTML meta tags for SEO, responsive design, and social media sharing.',
     descriptionUa: 'Дізнайтесь про основні HTML meta-теги для SEO, адаптивного дизайну та ділення в соціальних мережах.',
-    difficulty: 'EASY' as const,
+    difficulty: 'JUNIOR' as const,
     order: 22,
     contentMarkdownEn: `## What are Meta Tags?
 
@@ -408,7 +408,7 @@ Used by social media (Facebook, LinkedIn) to display page preview.
     titleUa: 'Різниця Між Тегами <strong> та <b>',
     descriptionEn: 'Understand the semantic difference between strong and b tags in HTML.',
     descriptionUa: 'Зрозумійте семантичну різницю між тегами strong та b в HTML.',
-    difficulty: 'EASY' as const,
+    difficulty: 'JUNIOR' as const,
     order: 23,
     contentMarkdownEn: `Both tags visually make text **bold**, but they have **different purposes** and **semantic meaning**.
 
@@ -477,7 +477,7 @@ Used by social media (Facebook, LinkedIn) to display page preview.
     titleUa: 'Як Приховати Елементи Візуально але Залишити Доступними',
     descriptionEn: 'Learn techniques to hide elements visually while keeping them accessible to screen readers.',
     descriptionUa: 'Дізнайтесь про техніки приховання елементів візуально, зберігаючи їх доступними для скрін-рідерів.',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 24,
     contentMarkdownEn: `## Goal
 

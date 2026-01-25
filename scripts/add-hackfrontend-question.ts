@@ -177,7 +177,7 @@ async function addQuestion(filePath: string) {
         descriptionUa: parsed.title,
         contentMarkdownEn: parsed.content,
         contentMarkdownUa: parsed.content, // TODO: Translate to Ukrainian
-        difficulty: 'MEDIUM',
+        difficulty: 'MIDDLE',
         order: 0,
         categoryId: category.id,
       })

@@ -27,7 +27,7 @@ const questions = [
     titleUa: 'enum в TypeScript',
     descriptionEn: 'Learn about TypeScript enumerations for named constants',
     descriptionUa: 'Дізнайтесь про перерахування TypeScript для іменованих констант',
-    difficulty: 'EASY' as const,
+    difficulty: 'JUNIOR' as const,
     order: 6,
     contentMarkdownEn: `### What is an enum?
 
@@ -174,7 +174,7 @@ const move = Directions.Up  // буде скомпільовано в літер
     titleUa: 'any проти unknown',
     descriptionEn: 'Understanding the difference between any and unknown types',
     descriptionUa: 'Розуміння різниці між типами any та unknown',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 7,
     contentMarkdownEn: `In **TypeScript** there are two types that can represent any values: **any** and **unknown**. Although both types allow working with any values, their behavior and safety differ.
 
@@ -280,7 +280,7 @@ if (typeof value === "string") {
     titleUa: 'Type Guards (Охоронці Типів)',
     descriptionEn: 'Narrow variable types in code blocks',
     descriptionUa: 'Звуження типів змінних у блоках коду',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 8,
     contentMarkdownEn: `**TypeGuard** helps narrow a variable's type within a code block, making code safer.
 
@@ -367,7 +367,7 @@ function speak(animal: Dog | Cat) {
     titleUa: 'Тип never',
     descriptionEn: 'Understanding the never type in TypeScript',
     descriptionUa: 'Розуміння типу never в TypeScript',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 9,
     contentMarkdownEn: `**The never type** in **TypeScript** is used to denote values that never occur.
 
@@ -418,7 +418,7 @@ function infiniteLoop(): never {
     titleUa: 'Ключове слово infer',
     descriptionEn: 'Type inference within conditional types',
     descriptionUa: 'Виведення типу в умовних типах',
-    difficulty: 'HARD' as const,
+    difficulty: 'SENIOR' as const,
     order: 10,
     contentMarkdownEn: `**infer** is used for **type inference** within conditional types. It allows TypeScript to automatically infer types based on context.
 

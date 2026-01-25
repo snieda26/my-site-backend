@@ -6,7 +6,7 @@ const createProblemSchema = z.object({
 	slug: z.string().min(1).max(200),
 	title: z.string().min(1).max(500),
 	description: z.string().min(1),
-	difficulty: z.enum(['EASY', 'MEDIUM', 'HARD']).default('MEDIUM'),
+	difficulty: z.enum(['JUNIOR', 'MIDDLE', 'SENIOR']).default('MIDDLE'),
 	starterCode: z.string().min(1),
 	solution: z.string().min(1),
 	testCases: z.string().min(1),
@@ -24,8 +24,8 @@ export class CreateProblemDto extends createZodDto(createProblemSchema) {
 	@ApiProperty({ example: 'Create a custom useState hook...', description: 'Problem description (markdown)' })
 	description: string
 
-	@ApiProperty({ enum: ['EASY', 'MEDIUM', 'HARD'], default: 'MEDIUM' })
-	difficulty: 'EASY' | 'MEDIUM' | 'HARD'
+	@ApiProperty({ enum: ['JUNIOR', 'MIDDLE', 'SENIOR'], default: 'MIDDLE' })
+	difficulty: 'JUNIOR' | 'MIDDLE' | 'SENIOR'
 
 	@ApiProperty({ example: 'function useState(initialValue) {\n  // Your code here\n}' })
 	starterCode: string
@@ -49,9 +49,13 @@ export class UpdateProblemDto extends createZodDto(updateProblemSchema) {}
 
 const submitSolutionSchema = z.object({
 	code: z.string().min(1),
+	status: z.enum(['ATTEMPTED', 'SOLVED']).default('ATTEMPTED'),
 })
 
 export class SubmitSolutionDto extends createZodDto(submitSolutionSchema) {
 	@ApiProperty({ example: 'function useState(initialValue) { ... }', description: 'User solution code' })
 	code: string
+
+	@ApiProperty({ enum: ['ATTEMPTED', 'SOLVED'], default: 'ATTEMPTED', description: 'Solution status' })
+	status: 'ATTEMPTED' | 'SOLVED'
 }

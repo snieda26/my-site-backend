@@ -28,7 +28,7 @@ const questions = [
     titleUa: 'CSS Одиниці: px, rem, em',
     descriptionEn: 'Learn about CSS units px, rem, and em, and when to use each for responsive design.',
     descriptionUa: 'Дізнайтесь про CSS одиниці px, rem та em, і коли використовувати кожну для адаптивного дизайну.',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 12,
     contentMarkdownEn: `In CSS, various **units of measurement** are used to set sizes (margins, fonts, widths, etc.). Among them, especially important are: \`px\`, \`em\`, \`rem\`. They affect **responsiveness**, **scalability** and **style inheritance**.
 
@@ -231,7 +231,7 @@ html {
     titleUa: 'CSS Одиниці: vh, vw, vmin, vmax',
     descriptionEn: 'Learn about viewport units in CSS and how to use them for responsive layouts.',
     descriptionUa: 'Дізнайтесь про одиниці viewport у CSS та як використовувати їх для адаптивних макетів.',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 13,
     contentMarkdownEn: `These CSS units are based on **viewport dimensions**. This is useful for creating adaptive, "fluid" layouts.
 
@@ -346,7 +346,7 @@ document.documentElement.style.setProperty('--vh', \`\${window.innerHeight * 0.0
     titleUa: 'CSS Медіа-запити',
     descriptionEn: 'Understand how media queries enable responsive design for different devices and screen sizes.',
     descriptionUa: 'Зрозумійте, як медіа-запити забезпечують адаптивний дизайн для різних пристроїв та розмірів екрану.',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 14,
     contentMarkdownEn: `**Media queries** are a mechanism in CSS that allows **applying styles depending on device characteristics**, such as screen width, pixel density, orientation, etc.
 
@@ -571,7 +571,7 @@ Most often styles are written first for mobile devices, then media queries with 
     titleUa: 'CSS Каскад',
     descriptionEn: 'Learn how CSS cascade determines which styles are applied when multiple rules target the same element.',
     descriptionUa: 'Дізнайтесь, як CSS каскад визначає, які стилі застосовуються, коли кілька правил стосуються одного елемента.',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 15,
     contentMarkdownEn: `**Cascade (Cascading)** is the main mechanism that determines **which style will be applied** when **multiple CSS rules** target the same element.
 
@@ -676,7 +676,7 @@ p { color: red; }  /* Буде застосовано це */
     titleUa: 'Data-атрибути в HTML',
     descriptionEn: 'Learn about HTML data attributes and how to use them for storing custom data in elements.',
     descriptionUa: 'Дізнайтесь про HTML data-атрибути та як використовувати їх для зберігання власних даних в елементах.',
-    difficulty: 'EASY' as const,
+    difficulty: 'JUNIOR' as const,
     order: 16,
     contentMarkdownEn: `**data attributes** are a way to store **custom data** in HTML elements. They start with the \`data-\` prefix and allow safely passing information from HTML to JavaScript **without creating non-standard attributes**.
 

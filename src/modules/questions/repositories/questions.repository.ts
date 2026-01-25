@@ -29,7 +29,7 @@ export class QuestionsRepository implements IQuestionsRepository {
 		}
 
 		if (filters?.difficulty) {
-			conditions.push(eq(schema.questions.difficulty, filters.difficulty as 'EASY' | 'MEDIUM' | 'HARD'))
+			conditions.push(eq(schema.questions.difficulty, filters.difficulty as 'JUNIOR' | 'MIDDLE' | 'SENIOR'))
 		}
 
 		if (filters?.category) {

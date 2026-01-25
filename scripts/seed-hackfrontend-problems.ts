@@ -28,7 +28,7 @@ const hackfrontendProblems = [
 		titleUa: 'K Найчастіших Елементів',
 		description: 'Given an array of integers `nums` and an integer `k`, return the `k` most frequent elements. You may return the answer in any order. The time complexity must be better than O(n log n).',
 		descriptionUa: 'Дано масив цілих чисел `nums` та ціле число `k`, поверніть `k` найчастіших елементів. Ви можете повернути відповідь у будь-якому порядку. Часова складність повинна бути кращою за O(n log n).',
-		difficulty: 'MEDIUM' as const,
+		difficulty: 'MIDDLE' as const,
 		starterCode: `function topKFrequent(nums, k) {
   // Write your code here
   
@@ -60,7 +60,7 @@ const hackfrontendProblems = [
 		titleUa: 'Витягнути Вузли за Типом',
 		description: 'Write a function `extractNodesByType(root, type)` that takes a DOM tree root and node type, and returns all nodes of that type in a flat array.',
 		descriptionUa: 'Напишіть функцію `extractNodesByType(root, type)`, яка приймає корінь DOM дерева та тип вузла, і повертає всі вузли цього типу в плоскому масиві.',
-		difficulty: 'MEDIUM' as const,
+		difficulty: 'MIDDLE' as const,
 		starterCode: `function extractNodesByType(root, type) {
   // Write your code here
   
@@ -100,7 +100,7 @@ const hackfrontendProblems = [
 		titleUa: 'Калькулятор Зворотної Польської Нотації',
 		description: 'Evaluate the value of an arithmetic expression in Reverse Polish Notation. Valid operators are `+`, `-`, `*`, and `/`. Each operand may be an integer or another expression.',
 		descriptionUa: 'Обчисліть значення арифметичного виразу в Зворотній Польській Нотації. Допустимі оператори: `+`, `-`, `*`, `/`. Кожен операнд може бути цілим числом або іншим виразом.',
-		difficulty: 'MEDIUM' as const,
+		difficulty: 'MIDDLE' as const,
 		starterCode: `function evalRPN(tokens) {
   // Write your code here
   
@@ -139,7 +139,7 @@ const hackfrontendProblems = [
 		titleUa: 'Зробити Великими Перші Літери Слів',
 		description: 'Write a function `capitalizeWords(str)` that capitalizes the first letter of each word in a string.',
 		descriptionUa: 'Напишіть функцію `capitalizeWords(str)`, яка робить великою першу літеру кожного слова в рядку.',
-		difficulty: 'EASY' as const,
+		difficulty: 'JUNIOR' as const,
 		starterCode: `function capitalizeWords(str) {
   // Write your code here
   
@@ -163,7 +163,7 @@ const hackfrontendProblems = [
 		titleUa: 'Об\'єднати Рядки з Об\'єктів',
 		description: 'Given an array of objects, where each object has a `name` property, write a function that returns a single string with all names concatenated, separated by commas.',
 		descriptionUa: 'Дано масив об\'єктів, де кожен об\'єкт має властивість `name`, напишіть функцію, яка повертає один рядок з усіма іменами, з\'єднаними комами.',
-		difficulty: 'EASY' as const,
+		difficulty: 'JUNIOR' as const,
 		starterCode: `function concatenateNames(arr) {
   // Write your code here
   
@@ -187,7 +187,7 @@ const hackfrontendProblems = [
 		titleUa: 'Знайти Індекси Елементів для Суми',
 		description: 'Given an array of numbers and a target sum, return the indices of two numbers that add up to the target. You may assume exactly one solution exists.',
 		descriptionUa: 'Дано масив чисел та цільову суму, поверніть індекси двох чисел, які в сумі дають цільове значення. Можна припустити, що існує рівно одне рішення.',
-		difficulty: 'EASY' as const,
+		difficulty: 'JUNIOR' as const,
 		starterCode: `function twoSumIndices(nums, target) {
   // Write your code here
   
@@ -218,7 +218,7 @@ const hackfrontendProblems = [
 		titleUa: 'Знайти Найглибший Максимальний Елемент',
 		description: 'Given a nested array structure, find the maximum element value and return its depth level (0-indexed from the root).',
 		descriptionUa: 'Дано вкладену структуру масиву, знайдіть максимальне значення елемента та поверніть його рівень глибини (з індексацією від 0 від кореня).',
-		difficulty: 'MEDIUM' as const,
+		difficulty: 'MIDDLE' as const,
 		starterCode: `function findDeepestMax(arr) {
   // Write your code here
   // Return { value: maxValue, depth: depthLevel }
@@ -255,7 +255,7 @@ const hackfrontendProblems = [
 		titleUa: 'Знайти Рядки з Підрядком',
 		description: 'Given an array of strings and a substring, return all strings that contain the substring.',
 		descriptionUa: 'Дано масив рядків та підрядок, поверніть всі рядки, які містять цей підрядок.',
-		difficulty: 'EASY' as const,
+		difficulty: 'JUNIOR' as const,
 		starterCode: `function findStringsWithSubstring(arr, substring) {
   // Write your code here
   
@@ -279,7 +279,7 @@ const hackfrontendProblems = [
 		titleUa: 'Отримати Значення з Об\'єкта за Шляхом',
 		description: 'Write a function `getValueByPath(obj, path)` that takes an object and a path string (e.g., "a.b.c") and returns the value at that path.',
 		descriptionUa: 'Напишіть функцію `getValueByPath(obj, path)`, яка приймає об\'єкт та рядок шляху (наприклад, "a.b.c") і повертає значення за цим шляхом.',
-		difficulty: 'MEDIUM' as const,
+		difficulty: 'MIDDLE' as const,
 		starterCode: `function getValueByPath(obj, path) {
   // Write your code here
   

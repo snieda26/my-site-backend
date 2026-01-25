@@ -28,7 +28,7 @@ const questions = [
     titleUa: 'Властивість Position в CSS',
     descriptionEn: 'Learn about CSS position property and its values: static, relative, absolute, fixed, and sticky.',
     descriptionUa: 'Дізнайтесь про властивість position в CSS та її значення: static, relative, absolute, fixed та sticky.',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 6,
     contentMarkdownEn: `The **position** property in CSS determines how an element will be placed on the page and what it will be positioned relative to.
 
@@ -201,7 +201,7 @@ Element behaves like \`relative\` while its parent block is in the visible area 
     titleUa: 'Flexbox проти CSS Grid',
     descriptionEn: 'Understand the differences between Flexbox and CSS Grid and when to use each layout system.',
     descriptionUa: 'Зрозумійте різницю між Flexbox та CSS Grid і коли використовувати кожну систему компонування.',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 7,
     contentMarkdownEn: `**Flexbox** and **CSS Grid** are two powerful CSS tools used to create flexible and responsive layouts. Both methods are designed to control element placement on a page, but their approaches and capabilities differ.
 

@@ -85,19 +85,48 @@ export class ProblemsService {
 		let solved: { status: string }
 
 		if (existing) {
-			solved = await this.solvedProblemsRepository.update(existing.id, { code: dto.code }) as { status: string }
+			solved = await this.solvedProblemsRepository.update(existing.id, { 
+				code: dto.code,
+				status: dto.status 
+			}) as { status: string }
 		} else {
 			solved = await this.solvedProblemsRepository.create({
 				accountId,
 				problemId: problem.id,
 				code: dto.code,
-				status: 'ATTEMPTED',
+				status: dto.status || 'ATTEMPTED',
 			})
 		}
 
 		return {
 			message: 'Solution submitted successfully',
 			status: solved.status,
+		}
+	}
+
+	async getSolvedProblems(accountId: string) {
+		const solved = await this.solvedProblemsRepository.findByAccount(accountId)
+		
+		return {
+			solved: solved.map(s => ({
+				problemId: s.problemId,
+				status: s.status,
+				solvedAt: s.solvedAt,
+			})),
+		}
+	}
+
+	async getUserSubmission(slug: string, accountId: string) {
+		const submission = await this.solvedProblemsRepository.findByAccountAndProblemSlug(accountId, slug)
+		
+		if (!submission) {
+			return null
+		}
+
+		return {
+			code: submission.code,
+			status: submission.status,
+			solvedAt: submission.solvedAt,
 		}
 	}
 

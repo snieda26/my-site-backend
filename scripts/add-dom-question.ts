@@ -225,7 +225,7 @@ async function addQuestion() {
         descriptionUa: 'Дізнайтесь про Document Object Model (DOM) та як JavaScript взаємодіє з веб-сторінками.',
         contentMarkdownEn: englishContent,
         contentMarkdownUa: ukrainianContent,
-        difficulty: 'EASY',
+        difficulty: 'JUNIOR',
         order: 2,
         categoryId: category.id,
       })

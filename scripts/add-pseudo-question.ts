@@ -235,7 +235,7 @@ async function addQuestion() {
         descriptionUa: 'Дізнайтесь про CSS псевдокласи та псевдоелементи. Як стилізувати елементи на основі їх стану та частин.',
         contentMarkdownEn: englishContent,
         contentMarkdownUa: ukrainianContent,
-        difficulty: 'MEDIUM',
+        difficulty: 'MIDDLE',
         order: 3,
         categoryId: category.id,
       })

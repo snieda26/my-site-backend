@@ -12,7 +12,7 @@ export class SearchQueryDto extends createZodDto(SearchQuerySchema) {}
 
 export const FilterQuerySchema = SearchQuerySchema.extend({
 	category: z.string().optional(),
-	difficulty: z.enum(['EASY', 'MEDIUM', 'HARD']).optional(),
+	difficulty: z.enum(['JUNIOR', 'MIDDLE', 'SENIOR']).optional(),
 	tag: z.string().optional(),
 })
 

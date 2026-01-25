@@ -562,7 +562,7 @@ async function importSecondPartQuestions() {
 							contentMarkdownUa: contentUa,
 							categoryId: dbCategory.id,
 							order: currentOrder,
-							difficulty: 'MEDIUM',
+							difficulty: 'MIDDLE',
 						})
 						
 						console.log(`    ✅ ${q.slug} (${q.content.length} → ${contentUa.length} chars)`)

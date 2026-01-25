@@ -455,7 +455,7 @@ async function importQuestions() {
 								contentMarkdownUa: contentUa,
 								categoryId: dbCategory.id,
 								order: i + 1,
-								difficulty: 'MEDIUM',
+								difficulty: 'MIDDLE',
 							})
 							
 							console.log(`    ✓ ${q.slug} (${q.content.length} chars)`)

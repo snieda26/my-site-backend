@@ -25,7 +25,7 @@ const questions = [
     titleUa: 'TypeScript Переваги та Недоліки',
     descriptionEn: 'Why TypeScript is needed, its advantages and disadvantages',
     descriptionUa: 'Навіщо потрібен TypeScript, його переваги та недоліки',
-    difficulty: 'EASY' as const,
+    difficulty: 'JUNIOR' as const,
     order: 1,
     contentMarkdownEn: `### What is TypeScript?
 
@@ -102,7 +102,7 @@ const questions = [
     titleUa: 'Декоратори в TypeScript',
     descriptionEn: 'Learn about TypeScript decorators for adding behavior to classes',
     descriptionUa: 'Дізнайтесь про декоратори TypeScript для додавання поведінки до класів',
-    difficulty: 'HARD' as const,
+    difficulty: 'SENIOR' as const,
     order: 2,
     contentMarkdownEn: `**Decorators** are **special functions** that can be applied to **classes**, **methods**, **properties** or **parameters** to **add or modify behavior** at runtime or compile time.
 
@@ -259,7 +259,7 @@ class Config {
     titleUa: 'type проти interface',
     descriptionEn: 'Key differences between type and interface in TypeScript',
     descriptionUa: 'Ключові різниці між type та interface в TypeScript',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 3,
     contentMarkdownEn: `In **TypeScript** there are two ways to describe types: **type** and **interface**.
 
@@ -374,7 +374,7 @@ const employee: Employee = {
     titleUa: 'Generics в TypeScript',
     descriptionEn: 'Create universal components with type safety using Generics',
     descriptionUa: 'Створюйте універсальні компоненти з безпекою типів за допомогою Generics',
-    difficulty: 'MEDIUM' as const,
+    difficulty: 'MIDDLE' as const,
     order: 4,
     contentMarkdownEn: `**Generic** in **TypeScript** is the ability to create **universal components** and **functions** that can work with any data types while maintaining **type safety**.
 
@@ -489,7 +489,7 @@ logLength([1, 2, 3]);  // 3
     titleUa: 'Union Типи',
     descriptionEn: 'Learn about Union types for flexible typing',
     descriptionUa: 'Дізнайтесь про Union типи для гнучкої типізації',
-    difficulty: 'EASY' as const,
+    difficulty: 'JUNIOR' as const,
     order: 5,
     contentMarkdownEn: `**Union** in **TypeScript** allows creating types that can be one of several types. This means a variable or function parameter can have multiple possible data types.
 
