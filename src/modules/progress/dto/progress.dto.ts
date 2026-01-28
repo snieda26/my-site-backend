@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { ApiProperty } from '@nestjs/swagger'
 
 const updateProgressSchema = z.object({
-	questionId: z.string().cuid(),
+	questionId: z.string().min(1),
 	status: z.enum(['NOT_STARTED', 'IN_PROGRESS', 'COMPLETED']),
 })
 
