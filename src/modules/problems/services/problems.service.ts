@@ -74,6 +74,14 @@ export class ProblemsService {
 	}
 
 	async submitSolution(slug: string, accountId: string, dto: SubmitSolutionDto) {
+		console.log('submitSolution - Received DTO:', {
+			slug,
+			accountId,
+			codeLength: dto.code?.length,
+			status: dto.status,
+			checkedRequirements: dto.checkedRequirements,
+		})
+
 		const problem = await this.problemsRepository.findBySlug(slug)
 
 		if (!problem) {
@@ -85,17 +93,25 @@ export class ProblemsService {
 		let solved: { status: string }
 
 		if (existing) {
-			solved = await this.solvedProblemsRepository.update(existing.id, { 
+			const updateData: any = { 
 				code: dto.code,
 				status: dto.status 
-			}) as { status: string }
+			}
+			if (dto.checkedRequirements !== undefined) {
+				updateData.checkedRequirements = dto.checkedRequirements
+				console.log('Updating with checkedRequirements:', dto.checkedRequirements)
+			}
+			solved = await this.solvedProblemsRepository.update(existing.id, updateData) as { status: string }
 		} else {
-			solved = await this.solvedProblemsRepository.create({
+			const createData = {
 				accountId,
 				problemId: problem.id,
 				code: dto.code,
 				status: dto.status || 'ATTEMPTED',
-			})
+				checkedRequirements: dto.checkedRequirements || '[]',
+			}
+			console.log('Creating new submission with checkedRequirements:', createData.checkedRequirements)
+			solved = await this.solvedProblemsRepository.create(createData)
 		}
 
 		return {
@@ -123,11 +139,20 @@ export class ProblemsService {
 			return null
 		}
 
-		return {
+		const result = {
 			code: submission.code,
 			status: submission.status,
+			checkedRequirements: submission.checkedRequirements || '[]',
 			solvedAt: submission.solvedAt,
 		}
+		
+		console.log('getUserSubmission - Returning:', {
+			hasCode: !!result.code,
+			status: result.status,
+			checkedRequirements: result.checkedRequirements,
+		})
+
+		return result
 	}
 
 	async runCode(slug: string, code: string) {

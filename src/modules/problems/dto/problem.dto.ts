@@ -54,6 +54,7 @@ export class UpdateProblemDto extends createZodDto(updateProblemSchema) {}
 const submitSolutionSchema = z.object({
 	code: z.string().min(1),
 	status: z.enum(['ATTEMPTED', 'SOLVED']).default('ATTEMPTED'),
+	checkedRequirements: z.string().optional(),
 })
 
 export class SubmitSolutionDto extends createZodDto(submitSolutionSchema) {
@@ -62,4 +63,7 @@ export class SubmitSolutionDto extends createZodDto(submitSolutionSchema) {
 
 	@ApiProperty({ enum: ['ATTEMPTED', 'SOLVED'], default: 'ATTEMPTED', description: 'Solution status' })
 	status: 'ATTEMPTED' | 'SOLVED'
+
+	@ApiProperty({ example: '[0,1,2]', description: 'Checked requirement indices as JSON string', required: false })
+	checkedRequirements?: string
 }

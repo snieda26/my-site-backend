@@ -72,6 +72,7 @@ export const solvedProblems = pgTable('solved_problems', {
 		.notNull(),
 	code: text('code').notNull(),
 	status: solveStatusEnum('status').default('ATTEMPTED').notNull(),
+	checkedRequirements: text('checked_requirements').default('[]'),
 	solvedAt: timestamp('solved_at').defaultNow().notNull(),
 }, (table) => ({
 	accountProblemUnique: unique('solved_problems_account_problem_unique')

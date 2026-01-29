@@ -169,6 +169,7 @@ export class SolvedProblemsRepository implements ISolvedProblemsRepository {
 				problemId: schema.solvedProblems.problemId,
 				code: schema.solvedProblems.code,
 				status: schema.solvedProblems.status,
+				checkedRequirements: schema.solvedProblems.checkedRequirements,
 				solvedAt: schema.solvedProblems.solvedAt,
 			})
 			.from(schema.solvedProblems)
@@ -184,7 +185,7 @@ export class SolvedProblemsRepository implements ISolvedProblemsRepository {
 		return solved || null
 	}
 
-	async create(data: { accountId: string; problemId: string; code: string; status: 'ATTEMPTED' | 'SOLVED' }): Promise<SolvedProblem> {
+	async create(data: { accountId: string; problemId: string; code: string; status: 'ATTEMPTED' | 'SOLVED'; checkedRequirements?: string }): Promise<SolvedProblem> {
 		const [solved] = await this.database.db
 			.insert(schema.solvedProblems)
 			.values(data)

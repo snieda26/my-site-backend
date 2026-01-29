@@ -28,38 +28,32 @@ const reactProblems = [
 		titleUa: 'Список Справ',
 		description: `Create a Todo List application with full task management functionality.
 
-Requirements:
-- List of tasks displaying all added items
-- Input field for adding new tasks
-- Ability to mark tasks as completed/incomplete (checkbox)
-- Completed tasks should be green
-- Delete button for each task
-- Tasks should have unique IDs
-- Add task on Enter key press
-- Clear input field after adding
-- Validation: don't add empty tasks
+### Requirements:
+- [ ] List of tasks displaying all added items
+- [ ] Input field for adding new tasks
+- [ ] Ability to mark tasks as completed/incomplete (checkbox)
+- [ ] Completed tasks should be green
+- [ ] Delete button for each task
+- [ ] Tasks should have unique IDs
 
-Additional:
-- Tasks should have unique IDs
-- Clear input field after adding a task
-- Validation: don't add empty tasks`,
+### Additional:
+- [ ] Add task on **Enter** key press
+- [ ] Clear input field after adding a task
+- [ ] Validation: don't add empty tasks`,
 		descriptionUa: `Створіть додаток Список Справ з повним функціоналом управління задачами.
 
-Вимоги:
-- Список задач, що відображає всі додані елементи
-- Поле вводу для додавання нових задач
-- Можливість позначити задачі як виконані/невиконані (чекбокс)
-- Виконані задачі повинні бути зеленими
-- Кнопка видалення для кожної задачі
-- Задачі повинні мати унікальні ID
-- Додавання задачі по натисканню Enter
-- Очищення поля вводу після додавання
-- Валідація: не додавати порожні задачі
+### Вимоги:
+- [ ] Список задач, що відображає всі додані елементи
+- [ ] Поле вводу для додавання нових задач
+- [ ] Можливість позначити задачі як виконані/невиконані (чекбокс)
+- [ ] Виконані задачі повинні бути зеленими
+- [ ] Кнопка видалення для кожної задачі
+- [ ] Задачі повинні мати унікальні ID
 
-Додатково:
-- Задачі повинні мати унікальні ID
-- Очищувати поле вводу після додавання задачі
-- Валідація: не додавати порожні задачі`,
+### Додатково:
+- [ ] Додавання задачі по натисканню **Enter**
+- [ ] Очищувати поле вводу після додавання задачі
+- [ ] Валідація: не додавати порожні задачі`,
 		difficulty: 'JUNIOR' as const,
 		category: 'react' as const,
 		starterCode: `import './styles.css';
@@ -135,22 +129,22 @@ export default function App() {
 		titleUa: 'Таймер з Елементами Керування',
 		description: `Create a timer application with start, stop, and reset functionality.
 
-Requirements:
-- Display time in seconds
-- Start button to begin timer
-- Stop button to pause timer
-- Reset button to set timer to 0
-- Timer should increment every second when running
-- Time format: display in seconds`,
+### Requirements:
+- [ ] Display time in seconds
+- [ ] Start button to begin timer
+- [ ] Stop button to pause timer
+- [ ] Reset button to set timer to 0
+- [ ] Timer should increment every second when running
+- [ ] Time format: display in seconds`,
 		descriptionUa: `Створіть додаток таймера з функціями старт, стоп та скидання.
 
-Вимоги:
-- Відображення часу в секундах
-- Кнопка старт для запуску таймера
-- Кнопка стоп для призупинення таймера
-- Кнопка скидання для встановлення таймера на 0
-- Таймер повинен збільшуватися кожну секунду під час роботи
-- Формат часу: відображення в секундах`,
+### Вимоги:
+- [ ] Відображення часу в секундах
+- [ ] Кнопка старт для запуску таймера
+- [ ] Кнопка стоп для призупинення таймера
+- [ ] Кнопка скидання для встановлення таймера на 0
+- [ ] Таймер повинен збільшуватися кожну секунду під час роботи
+- [ ] Формат часу: відображення в секундах`,
 		difficulty: 'JUNIOR' as const,
 		category: 'react' as const,
 		starterCode: `import { useState, useEffect } from 'react';
@@ -206,20 +200,20 @@ export default function App() {
 		titleUa: 'Контрольований vs Неконтрольований',
 		description: `Create two input components demonstrating controlled and uncontrolled components.
 
-Requirements:
-- One controlled input (value managed by React state)
-- One uncontrolled input (value managed by DOM)
-- Display both values below inputs
-- Show real-time updates for controlled input
-- Get uncontrolled value on button click`,
+### Requirements:
+- [ ] One **controlled input** (value managed by React state)
+- [ ] One **uncontrolled input** (value managed by DOM)
+- [ ] Display both values below inputs
+- [ ] Show real-time updates for controlled input
+- [ ] Get uncontrolled value on button click`,
 		descriptionUa: `Створіть два компоненти вводу, що демонструють контрольовані та неконтрольовані компоненти.
 
-Вимоги:
-- Один контрольований input (значення керується React state)
-- Один неконтрольований input (значення керується DOM)
-- Відображення обох значень під полями вводу
-- Показувати оновлення в реальному часі для контрольованого input
-- Отримувати значення неконтрольованого input при натисканні кнопки`,
+### Вимоги:
+- [ ] Один **контрольований input** (значення керується React state)
+- [ ] Один **неконтрольований input** (значення керується DOM)
+- [ ] Відображення обох значень під полями вводу
+- [ ] Показувати оновлення в реальному часі для контрольованого input
+- [ ] Отримувати значення неконтрольованого input при натисканні кнопки`,
 		difficulty: 'JUNIOR' as const,
 		category: 'react' as const,
 		starterCode: `import { useState, useRef } from 'react';
@@ -267,22 +261,22 @@ export default function App() {
 		slug: 'use-debounce-hook',
 		title: 'useDebounce Hook',
 		titleUa: 'Хук useDebounce',
-		description: `Implement a custom useDebounce hook that delays updating a value.
+		description: `Implement a custom **useDebounce** hook that delays updating a value.
 
-Requirements:
-- Create useDebounce custom hook
-- Hook should accept value and delay (ms)
-- Return debounced value
-- Use the hook to debounce search input
-- Display both immediate and debounced values`,
-		descriptionUa: `Реалізуйте кастомний хук useDebounce, який затримує оновлення значення.
+### Requirements:
+- [ ] Create \`useDebounce\` custom hook
+- [ ] Hook should accept \`value\` and \`delay\` (ms)
+- [ ] Return debounced value
+- [ ] Use the hook to debounce search input
+- [ ] Display both immediate and debounced values`,
+		descriptionUa: `Реалізуйте кастомний хук **useDebounce**, який затримує оновлення значення.
 
-Вимоги:
-- Створити кастомний хук useDebounce
-- Хук повинен приймати значення та затримку (мс)
-- Повертати debounced значення
-- Використовувати хук для debounce пошукового вводу
-- Відображати як негайне, так і debounced значення`,
+### Вимоги:
+- [ ] Створити кастомний хук \`useDebounce\`
+- [ ] Хук повинен приймати \`value\` та \`delay\` (мс)
+- [ ] Повертати debounced значення
+- [ ] Використовувати хук для debounce пошукового вводу
+- [ ] Відображати як негайне, так і debounced значення`,
 		difficulty: 'MIDDLE' as const,
 		category: 'react' as const,
 		starterCode: `import { useState, useEffect } from 'react';
@@ -341,20 +335,20 @@ export default function App() {
 		slug: 'use-toggle-hook',
 		title: 'useToggle Hook',
 		titleUa: 'Хук useToggle',
-		description: `Create a custom useToggle hook for boolean state management.
+		description: `Create a custom **useToggle** hook for boolean state management.
 
-Requirements:
-- Implement useToggle hook that returns [value, toggle]
-- toggle function should flip boolean value
-- Use the hook to toggle visibility of content
-- Show/Hide button based on toggle state`,
-		descriptionUa: `Створіть кастомний хук useToggle для управління булевим станом.
+### Requirements:
+- [ ] Implement \`useToggle\` hook that returns \`[value, toggle]\`
+- [ ] \`toggle\` function should flip boolean value
+- [ ] Use the hook to toggle visibility of content
+- [ ] Show/Hide button based on toggle state`,
+		descriptionUa: `Створіть кастомний хук **useToggle** для управління булевим станом.
 
-Вимоги:
-- Реалізувати хук useToggle, який повертає [value, toggle]
-- Функція toggle повинна перемикати булеве значення
-- Використовувати хук для перемикання видимості контенту
-- Кнопка Показати/Сховати базується на стані toggle`,
+### Вимоги:
+- [ ] Реалізувати хук \`useToggle\`, який повертає \`[value, toggle]\`
+- [ ] Функція \`toggle\` повинна перемикати булеве значення
+- [ ] Використовувати хук для перемикання видимості контенту
+- [ ] Кнопка Показати/Сховати базується на стані toggle`,
 		difficulty: 'JUNIOR' as const,
 		category: 'react' as const,
 		starterCode: `import { useState } from 'react';
@@ -403,22 +397,22 @@ export default function App() {
 		slug: 'use-hover-hook',
 		title: 'useHover Hook',
 		titleUa: 'Хук useHover',
-		description: `Create a custom useHover hook that detects when an element is hovered.
+		description: `Create a custom **useHover** hook that detects when an element is hovered.
 
-Requirements:
-- Implement useHover hook that returns [ref, isHovered]
-- Track mouse enter/leave events
-- Apply the hook to an element
-- Display hover state visually
-- Change element style when hovered`,
-		descriptionUa: `Створіть кастомний хук useHover, який визначає, коли елемент наведений.
+### Requirements:
+- [ ] Implement \`useHover\` hook that returns \`[ref, isHovered]\`
+- [ ] Track mouse enter/leave events
+- [ ] Apply the hook to an element
+- [ ] Display hover state visually
+- [ ] Change element style when hovered`,
+		descriptionUa: `Створіть кастомний хук **useHover**, який визначає, коли елемент наведений.
 
-Вимоги:
-- Реалізувати хук useHover, який повертає [ref, isHovered]
-- Відстежувати події mouse enter/leave
-- Застосувати хук до елемента
-- Відображати стан наведення візуально
-- Змінювати стиль елемента при наведенні`,
+### Вимоги:
+- [ ] Реалізувати хук \`useHover\`, який повертає \`[ref, isHovered]\`
+- [ ] Відстежувати події mouse enter/leave
+- [ ] Застосувати хук до елемента
+- [ ] Відображати стан наведення візуально
+- [ ] Змінювати стиль елемента при наведенні`,
 		difficulty: 'MIDDLE' as const,
 		category: 'react' as const,
 		starterCode: `import { useState, useEffect, useRef } from 'react';
@@ -486,22 +480,22 @@ export default function App() {
 		slug: 'accordion-component',
 		title: 'Accordion Component',
 		titleUa: 'Компонент Accordion',
-		description: `Create an accordion component that shows/hides content sections.
+		description: `Create an **Accordion** component that shows/hides content sections.
 
-Requirements:
-- Multiple accordion items
-- Click header to toggle content visibility
-- Only one item can be open at a time
-- Smooth expand/collapse animation
-- Visual indicator (arrow) for open/closed state`,
-		descriptionUa: `Створіть компонент accordion, який показує/ховає секції контенту.
+### Requirements:
+- [ ] Multiple accordion items
+- [ ] Click header to toggle content visibility
+- [ ] Only one item can be open at a time
+- [ ] Smooth expand/collapse animation
+- [ ] Visual indicator (arrow) for open/closed state`,
+		descriptionUa: `Створіть компонент **Accordion**, який показує/ховає секції контенту.
 
-Вимоги:
-- Кілька елементів accordion
-- Клік по заголовку для перемикання видимості контенту
-- Тільки один елемент може бути відкритим одночасно
-- Плавна анімація розгортання/згортання
-- Візуальний індикатор (стрілка) для відкритого/закритого стану`,
+### Вимоги:
+- [ ] Кілька елементів accordion
+- [ ] Клік по заголовку для перемикання видимості контенту
+- [ ] Тільки один елемент може бути відкритим одночасно
+- [ ] Плавна анімація розгортання/згортання
+- [ ] Візуальний індикатор (стрілка) для відкритого/закритого стану`,
 		difficulty: 'MIDDLE' as const,
 		category: 'react' as const,
 		starterCode: `import { useState } from 'react';
@@ -558,22 +552,22 @@ export default function App() {
 		slug: 'carousel-component',
 		title: 'Carousel Component',
 		titleUa: 'Компонент Carousel',
-		description: `Create a carousel/slider component with navigation controls.
+		description: `Create a **Carousel/Slider** component with navigation controls.
 
-Requirements:
-- Display one image/item at a time
-- Next/Previous buttons for navigation
-- Indicator dots showing current position
-- Auto-advance every 3 seconds (optional)
-- Wrap around (after last item, go to first)`,
-		descriptionUa: `Створіть компонент carousel/slider з елементами навігації.
+### Requirements:
+- [ ] Display one image/item at a time
+- [ ] Next/Previous buttons for navigation
+- [ ] Indicator dots showing current position
+- [ ] Auto-advance every 3 seconds (optional)
+- [ ] Wrap around (after last item, go to first)`,
+		descriptionUa: `Створіть компонент **Carousel/Slider** з елементами навігації.
 
-Вимоги:
-- Відображення одного зображення/елемента за раз
-- Кнопки Наступний/Попередній для навігації
-- Індикаторні точки, що показують поточну позицію
-- Автоматичне перемикання кожні 3 секунди (опціонально)
-- Зациклювання (після останнього елемента, перейти до першого)`,
+### Вимоги:
+- [ ] Відображення одного зображення/елемента за раз
+- [ ] Кнопки Наступний/Попередній для навігації
+- [ ] Індикаторні точки, що показують поточну позицію
+- [ ] Автоматичне перемикання кожні 3 секунди (опціонально)
+- [ ] Зациклювання (після останнього елемента, перейти до першого)`,
 		difficulty: 'MIDDLE' as const,
 		category: 'react' as const,
 		starterCode: `import { useState } from 'react';
