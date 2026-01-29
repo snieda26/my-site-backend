@@ -27,6 +27,10 @@ export class ProblemsRepository implements IProblemsRepository {
 			conditions.push(eq(schema.problems.difficulty, filters.difficulty as 'JUNIOR' | 'MIDDLE' | 'SENIOR'))
 		}
 
+		if (filters?.category) {
+			conditions.push(eq(schema.problems.category, filters.category as 'javascript' | 'react' | 'typescript' | 'other'))
+		}
+
 		const whereClause = conditions.length > 0 ? and(...conditions) : undefined
 		const orderByColumn = filters?.sortBy === 'difficulty' ? schema.problems.difficulty : schema.problems.createdAt
 		const orderByClause = filters?.sortOrder === 'desc' ? desc(orderByColumn) : asc(orderByColumn)

@@ -6,6 +6,7 @@ import { accounts } from './auth.schema'
 import { tags } from './questions.schema'
 
 export const solveStatusEnum = pgEnum('solve_status', ['ATTEMPTED', 'SOLVED'])
+export const problemCategoryEnum = pgEnum('problem_category', ['javascript', 'react', 'typescript', 'other'])
 
 export const problems = pgTable('problems', {
 	id: varchar('id', { length: 128 })
@@ -17,6 +18,7 @@ export const problems = pgTable('problems', {
 	description: text('description').notNull(),
 	descriptionUa: text('description_ua'),
 	difficulty: difficultyEnum('difficulty').default('MIDDLE').notNull(),
+	category: problemCategoryEnum('category').default('javascript').notNull(),
 	starterCode: text('starter_code').notNull(),
 	solution: text('solution').notNull(),
 	testCases: text('test_cases').notNull(),
@@ -25,6 +27,7 @@ export const problems = pgTable('problems', {
 }, (table) => ({
 	slugIdx: index('problems_slug_idx').on(table.slug),
 	difficultyIdx: index('problems_difficulty_idx').on(table.difficulty),
+	categoryIdx: index('problems_category_idx').on(table.category),
 }))
 
 export const companies = pgTable('companies', {

@@ -7,6 +7,7 @@ const createProblemSchema = z.object({
 	title: z.string().min(1).max(500),
 	description: z.string().min(1),
 	difficulty: z.enum(['JUNIOR', 'MIDDLE', 'SENIOR']).default('MIDDLE'),
+	category: z.enum(['javascript', 'react', 'typescript', 'other']).default('javascript'),
 	starterCode: z.string().min(1),
 	solution: z.string().min(1),
 	testCases: z.string().min(1),
@@ -26,6 +27,9 @@ export class CreateProblemDto extends createZodDto(createProblemSchema) {
 
 	@ApiProperty({ enum: ['JUNIOR', 'MIDDLE', 'SENIOR'], default: 'MIDDLE' })
 	difficulty: 'JUNIOR' | 'MIDDLE' | 'SENIOR'
+
+	@ApiProperty({ enum: ['javascript', 'react', 'typescript', 'other'], default: 'javascript' })
+	category: 'javascript' | 'react' | 'typescript' | 'other'
 
 	@ApiProperty({ example: 'function useState(initialValue) {\n  // Your code here\n}' })
 	starterCode: string

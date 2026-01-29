@@ -4,6 +4,7 @@ import { PaginatedResult } from '@common/interfaces'
 export interface ProblemFilters {
 	search?: string
 	difficulty?: string
+	category?: string
 	sortBy?: string
 	sortOrder?: 'asc' | 'desc'
 }

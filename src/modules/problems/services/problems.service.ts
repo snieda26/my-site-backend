@@ -20,8 +20,8 @@ export class ProblemsService {
 	) {}
 
 	async findAll(query: FilterQueryDto) {
-		const { page, limit, search, difficulty, sortBy, sortOrder } = query
-		return this.problemsRepository.findAll(page, limit, { search, difficulty, sortBy, sortOrder })
+		const { page, limit, search, difficulty, category, sortBy, sortOrder } = query
+		return this.problemsRepository.findAll(page, limit, { search, difficulty, category, sortBy, sortOrder })
 	}
 
 	async findBySlug(slug: string) {
