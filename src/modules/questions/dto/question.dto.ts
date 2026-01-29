@@ -10,6 +10,8 @@ const createQuestionSchema = z.object({
 	descriptionUa: z.string().optional(),
 	contentMarkdownEn: z.string().min(1),
 	contentMarkdownUa: z.string().min(1),
+	shortAnswerEn: z.string().optional().nullable(),
+	shortAnswerUa: z.string().optional().nullable(),
 	difficulty: z.enum(['JUNIOR', 'MIDDLE', 'SENIOR']).default('MIDDLE'),
 	categoryId: z.string().cuid(),
 	tags: z.array(z.string()).optional(),
@@ -41,6 +43,12 @@ export class CreateQuestionDto extends createZodDto(createQuestionSchema) {
 
 	@ApiProperty({ example: '## Що таке замикання?\n\nЗамикання - це...', description: 'Question markdown content (Ukrainian)' })
 	contentMarkdownUa: string
+
+	@ApiProperty({ example: 'TypeScript is a superset of JavaScript with static typing...', description: 'Short answer for knowledge check (English)', required: false })
+	shortAnswerEn?: string | null
+
+	@ApiProperty({ example: 'TypeScript — це надбудова над JavaScript зі статичною типізацією...', description: 'Short answer for knowledge check (Ukrainian)', required: false })
+	shortAnswerUa?: string | null
 
 	@ApiProperty({ enum: ['JUNIOR', 'MIDDLE', 'SENIOR'], default: 'MIDDLE' })
 	difficulty: 'JUNIOR' | 'MIDDLE' | 'SENIOR'

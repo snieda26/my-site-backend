@@ -32,6 +32,8 @@ export const questions = pgTable('questions', {
 	descriptionUa: text('description_ua'),
 	contentMarkdownEn: text('content_markdown_en').notNull(),
 	contentMarkdownUa: text('content_markdown_ua').notNull(),
+	shortAnswerEn: text('short_answer_en'),
+	shortAnswerUa: text('short_answer_ua'),
 	difficulty: difficultyEnum('difficulty').default('MIDDLE').notNull(),
 	order: integer('order').default(0).notNull(),
 	prevSlug: varchar('prev_slug', { length: 255 }),
